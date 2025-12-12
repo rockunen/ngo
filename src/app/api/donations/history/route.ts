@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { donationService } from "@/lib/donation";
 import { authService } from "@/lib/auth";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get current user
     const user = await authService.getCurrentUser();
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get donation history for user
-    const donations = await donationService.getDonationHistory(user.id, 50);
+    const donations = await donationService.getDonationHistory(50);
 
     return NextResponse.json({
       success: true,

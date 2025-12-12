@@ -1,4 +1,4 @@
-import { Suspense } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 

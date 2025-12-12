@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { donationService } from "@/lib/donation";
 import { authService } from "@/lib/auth";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get current user (optional - if user is authenticated, get their stats)
     let user;
     try {
       user = await authService.getCurrentUser();
-    } catch (e) {
+    } catch {
       // User not authenticated, will get global stats
       user = null;
     }
 
     // Get donation statistics
-    const stats = await donationService.getDonationStats(user?.id);
+    const stats = await donationService.getDonationStats();
 
     return NextResponse.json({
       success: true,

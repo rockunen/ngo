@@ -184,8 +184,6 @@ export default function Animals() {
           </Link>
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 }

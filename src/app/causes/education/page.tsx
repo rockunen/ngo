@@ -181,7 +181,6 @@ export default function Education() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

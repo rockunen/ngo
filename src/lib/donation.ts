@@ -94,7 +94,7 @@ export const donationService = {
       if (paymentError) throw paymentError;
 
       // Update donation status
-      const { data: donation, error: donationError } = await supabase
+      await supabase
         .from("donations")
         .update({
           status: "completed",
@@ -104,8 +104,6 @@ export const donationService = {
         .select()
         .single();
 
-      if (donationError) throw donationError;
-
       return payment;
     } catch (error) {
       throw error;
@@ -113,7 +111,7 @@ export const donationService = {
   },
 
   // Get donation history for a user
-  async getDonationHistory(userId: string, limit: number = 50) {
+  async getDonationHistory(limit: number = 50) {
     try {
       const supabase = supabaseServer();
 
@@ -144,11 +142,11 @@ export const donationService = {
   },
 
   // Get donation statistics
-  async getDonationStats(userId?: string) {
+  async getDonationStats() {
     try {
       const supabase = supabaseServer();
 
-      let query = supabase
+      const query = supabase
         .from("donations")
         .select("amount, donation_type, status, created_at", {
           count: "exact",

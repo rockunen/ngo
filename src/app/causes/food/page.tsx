@@ -183,7 +183,6 @@ export default function Food() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

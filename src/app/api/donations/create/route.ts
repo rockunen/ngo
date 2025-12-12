@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const supabase = supabaseServer();
 
     // Create or get donor
-    let donor = await supabase
+    const donor = await supabase
       .from("donors")
       .select("id")
       .eq("email", data.email)
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
         donor_id: donorId,
         donation_id: donation.id,
         donor_name: data.fullName,
-        donor_email: data.email,
+        donor_email: data.email || "no-email@provided.com",
       },
     });
 

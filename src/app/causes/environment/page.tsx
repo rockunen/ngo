@@ -183,7 +183,6 @@ export default function Environment() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

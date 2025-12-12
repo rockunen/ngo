@@ -31,9 +31,6 @@ export default function DonationForm({
     watch,
   } = useForm<DonationFormData>({
     resolver: zodResolver(donationFormSchema),
-    defaultValues: {
-      receiveNewsletter: false,
-    },
   });
 
   const customAmount = watch("amount");
