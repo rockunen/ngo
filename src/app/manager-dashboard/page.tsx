@@ -14,7 +14,6 @@ export default function ManagerDashboard() {
   const router = useRouter();
   const [manager, setManager] = useState<Manager | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const verifySession = async () => {
@@ -63,11 +62,11 @@ export default function ManagerDashboard() {
     );
   }
 
-  if (error || !manager) {
+  if (!manager) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error || "Not authenticated"}</p>
+          <p className="text-red-600 mb-4">Not authenticated</p>
           <Link
             href="/manager-login"
             className="text-blue-600 font-semibold hover:underline"
