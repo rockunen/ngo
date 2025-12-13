@@ -29,16 +29,22 @@ interface DonationsResponse {
 export default function DonationsManagementPage() {
   const router = useRouter();
   const [donations, setDonations] = useState<Donation[]>([]);
+  const [filteredDonations, setFilteredDonations] = useState<Donation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [totalDonations, setTotalDonations] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("completed");
+  const [stats, setStats] = useState<{
+    completed: { totalAmount: number; averageAmount: number; count: number };
+    pending: { count: number };
+    failed: { count: number };
+    summary: any;
+  } | null>(null);
 
   useEffect(() => {
-    // Verify manager session using server-side endpoint
     const verifySession = async () => {
       try {
         const response = await fetch("/api/auth/verify-session");
@@ -54,8 +60,9 @@ export default function DonationsManagementPage() {
           return;
         }
 
-        // Session is valid, fetch donations
+        // Session is valid, fetch donations and stats
         fetchDonations();
+        fetchStats();
       } catch (err) {
         console.error("Session verification error:", err);
         router.push("/manager-login");
@@ -101,15 +108,36 @@ export default function DonationsManagementPage() {
     }
   };
 
-  const filteredDonations = donations.filter((donation) => {
-    const matchesSearch =
-      donation.donors.full_name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      donation.donors.email.toLowerCase().includes(searchTerm.toLowerCase());
+  const fetchStats = async () => {
+    try {
+      const response = await fetch("/api/donations/stats");
+      if (response.ok) {
+        const result = await response.json();
+        setStats(result.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch stats:", err);
+    }
+  };
 
-    return matchesSearch;
-  });
+  useEffect(() => {
+    const filtered = donations.filter((donation) => {
+      const matchesStatus =
+        filterStatus === "all" || donation.status === filterStatus;
+      const matchesSearch =
+        searchTerm === "" ||
+        donation.donors?.full_name
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        donation.donors?.email
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase());
+
+      return matchesStatus && matchesSearch;
+    });
+
+    setFilteredDonations(filtered);
+  }, [donations, filterStatus, searchTerm]);
 
   const totalPages = Math.ceil(totalDonations / itemsPerPage);
 
@@ -147,6 +175,55 @@ export default function DonationsManagementPage() {
           </div>
         )}
 
+        {/* Stats Cards */}
+        {stats && (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+              <p className="text-gray-600 text-sm font-semibold">
+                Total Completed Amount
+              </p>
+              <p className="text-3xl font-bold text-green-600 mt-2">
+                ₹{stats.completed.totalAmount.toLocaleString("en-IN")}
+              </p>
+              <p className="text-gray-500 text-xs mt-1">
+                {stats.completed.count} completed donations
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+              <p className="text-gray-600 text-sm font-semibold">
+                Average Donation
+              </p>
+              <p className="text-3xl font-bold text-blue-600 mt-2">
+                ₹{stats.completed.averageAmount.toFixed(2)}
+              </p>
+              <p className="text-gray-500 text-xs mt-1">
+                Per completed donation
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+              <p className="text-gray-600 text-sm font-semibold">
+                Pending Donations
+              </p>
+              <p className="text-3xl font-bold text-yellow-600 mt-2">
+                {stats.pending.count}
+              </p>
+              <p className="text-gray-500 text-xs mt-1">Awaiting payment</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+              <p className="text-gray-600 text-sm font-semibold">
+                Failed Donations
+              </p>
+              <p className="text-3xl font-bold text-red-600 mt-2">
+                {stats.failed.count}
+              </p>
+              <p className="text-gray-500 text-xs mt-1">Payment declined</p>
+            </div>
+          </div>
+        )}
+
         {/* Search and Filter */}
         <div className="mb-6 bg-white p-4 rounded-lg shadow">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -177,8 +254,8 @@ export default function DonationsManagementPage() {
                 }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
               >
-                <option value="all">All Statuses</option>
                 <option value="completed">Completed</option>
+                <option value="all">All Statuses</option>
                 <option value="pending">Pending</option>
                 <option value="failed">Failed</option>
               </select>
@@ -290,41 +367,6 @@ export default function DonationsManagementPage() {
               </div>
             </>
           )}
-        </div>
-
-        {/* Additional Statistics */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Total Donations
-            </h3>
-            <p className="text-3xl font-bold text-blue-600">{totalDonations}</p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              This Page Amount
-            </h3>
-            <p className="text-3xl font-bold text-green-600">
-              {filteredDonations
-                .reduce((sum, d) => sum + d.amount, 0)
-                .toFixed(2)}
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Average Donation
-            </h3>
-            <p className="text-3xl font-bold text-purple-600">
-              {filteredDonations.length > 0
-                ? (
-                    filteredDonations.reduce((sum, d) => sum + d.amount, 0) /
-                    filteredDonations.length
-                  ).toFixed(2)
-                : "0.00"}
-            </p>
-          </div>
         </div>
       </section>
     </main>

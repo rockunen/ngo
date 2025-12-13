@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS public.donations (
   razorpay_order_id TEXT UNIQUE,
   razorpay_payment_id TEXT UNIQUE,
   razorpay_signature TEXT,
+  idempotency_key TEXT UNIQUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

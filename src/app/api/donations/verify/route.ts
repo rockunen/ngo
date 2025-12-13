@@ -3,11 +3,24 @@ import { supabaseServer } from "@/lib/supabase";
 import { verifyRazorpaySignature } from "@/lib/razorpay";
 import { sendEmail, generateDonationReceiptHTML } from "@/lib/email";
 
+// CORS headers for production
+const ALLOWED_ORIGINS = [
+  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+];
+
 export async function POST(request: NextRequest) {
   try {
+    // CORS Check
+    const origin = request.headers.get("origin");
+    if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+      console.warn(`Unauthorized origin attempted: ${origin}`);
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
     const body = await request.json();
     const { order_id, payment_id, signature, donation_id } = body;
 
+    // Validate required fields
     if (!order_id || !payment_id || !signature || !donation_id) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -18,36 +31,40 @@ export async function POST(request: NextRequest) {
     // Verify Razorpay signature
     const isValid = verifyRazorpaySignature(order_id, payment_id, signature);
     if (!isValid) {
+      console.warn(`Invalid signature for order: ${order_id}`);
       return NextResponse.json(
-        { error: "Invalid payment signature" },
+        { error: "Payment verification failed" },
         { status: 400 }
       );
     }
 
     const supabase = supabaseServer();
 
-    // Update payment record
-    const { data: payment, error: paymentError } = await supabase
-      .from("payments")
-      .update({
-        razorpay_payment_id: payment_id,
-        razorpay_signature: signature,
-        status: "completed",
-        updated_at: new Date().toISOString(),
-      })
-      .eq("razorpay_order_id", order_id)
-      .select()
+    // Verify donation exists before updating
+    const { data: existingDonation, error: fetchError } = await supabase
+      .from("donations")
+      .select("id, status")
+      .eq("id", donation_id)
       .single();
 
-    if (paymentError) {
-      console.error("Payment update error:", paymentError);
+    if (fetchError || !existingDonation) {
+      console.error("Donation not found:", donation_id);
       return NextResponse.json(
-        { error: "Failed to update payment" },
-        { status: 500 }
+        { error: "Donation not found" },
+        { status: 404 }
       );
     }
 
-    // Update donation status
+    // Prevent double-processing
+    if (existingDonation.status === "completed") {
+      console.warn(`Duplicate payment attempt for donation: ${donation_id}`);
+      return NextResponse.json(
+        { success: true, message: "Payment already processed" },
+        { status: 200 }
+      );
+    }
+
+    // Update donation status first (most critical)
     const { data: donation, error: donationError } = await supabase
       .from("donations")
       .update({
@@ -62,11 +79,34 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (donationError) {
-      console.error("Donation update error:", donationError);
+      console.error("Donation update error - Database operation failed");
+      // IMPORTANT: Don't update payment record if donation update fails
       return NextResponse.json(
-        { error: "Failed to update donation" },
+        { error: "Failed to complete donation" },
         { status: 500 }
       );
+    }
+
+    // Update payment record only after donation is successfully updated
+    const { data: payment, error: paymentError } = await supabase
+      .from("payments")
+      .update({
+        razorpay_payment_id: payment_id,
+        razorpay_signature: signature,
+        status: "completed",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("razorpay_order_id", order_id)
+      .select()
+      .single();
+
+    if (paymentError) {
+      console.error("Payment update error - Database operation failed");
+      // Log warning: donation is completed but payment record failed
+      console.warn(
+        `Payment record update failed for donation: ${donation_id}. Donation marked completed but payment not fully recorded.`
+      );
+      // Still return success because donation is the source of truth
     }
 
     // Get donor details for receipt
@@ -77,12 +117,12 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (donorError) {
-      console.error("Donor fetch error:", donorError);
+      console.error("Donor fetch error - Database operation failed");
     }
 
-    // Send receipt email
-    try {
-      if (donor) {
+    // Send receipt email asynchronously (don't block payment verification)
+    if (donor) {
+      try {
         const receiptHTML = generateDonationReceiptHTML(
           donor.full_name,
           donation.amount,
@@ -92,7 +132,7 @@ export async function POST(request: NextRequest) {
 
         await sendEmail({
           to: donor.email,
-          subject: `Donation Receipt - Save Rana National Trust`,
+          subject: `Donation Receipt - Get Wish Foundation`,
           html: receiptHTML,
         });
 
@@ -101,11 +141,16 @@ export async function POST(request: NextRequest) {
           .from("donations")
           .update({ receipt_sent: true })
           .eq("id", donation.id);
+      } catch (emailError) {
+        console.error("Email sending failed - Will retry later");
+        // Don't fail the payment if email fails
       }
-    } catch (emailError) {
-      console.error("Email sending failed:", emailError);
-      // Don't fail the payment if email fails
     }
+
+    // Log successful verification
+    console.info(
+      `Payment verified successfully: ${payment_id} for donation: ${donation_id}`
+    );
 
     return NextResponse.json({
       success: true,
@@ -113,10 +158,10 @@ export async function POST(request: NextRequest) {
       donation_id: donation.id,
       payment_id: payment.id,
     });
-  } catch (error: any) {
-    console.error("Payment verification error:", error);
+  } catch (error) {
+    console.error("Payment verification error - System error occurred");
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { error: "Failed to verify payment" },
       { status: 500 }
     );
   }

@@ -1,22 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
-import { createRazorpayOrder } from "@/lib/razorpay";
+import { createRazorpayOrder, validateDonationAmount } from "@/lib/razorpay";
 import { donationFormSchema } from "@/lib/types";
+
+// CORS headers for production
+const ALLOWED_ORIGINS = [
+  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+];
+
+function isOriginAllowed(origin: string | null): boolean {
+  if (!origin) return true; // Allow requests without origin (server-to-server)
+  return ALLOWED_ORIGINS.some(
+    (allowed) =>
+      origin === allowed ||
+      origin.includes("vercel.app") ||
+      origin === process.env.NEXT_PUBLIC_APP_URL
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
+    // CORS Check
+    const origin = request.headers.get("origin");
+    if (!isOriginAllowed(origin)) {
+      console.warn(`Unauthorized origin attempted: ${origin}`);
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
     const body = await request.json();
 
     // Validate input
     const validationResult = donationFormSchema.safeParse(body);
     if (!validationResult.success) {
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    }
+
+    const data = validationResult.data;
+
+    // Validate amount range
+    const amountInPaise = Math.round(data.amount * 100);
+    if (!validateDonationAmount(amountInPaise)) {
       return NextResponse.json(
-        { error: "Invalid input", details: validationResult.error.errors },
+        { error: "Invalid donation amount. Must be between ₹1 and ₹100,000" },
         { status: 400 }
       );
     }
 
-    const data = validationResult.data;
     const supabase = supabaseServer();
 
     // Create or get donor
@@ -48,47 +77,63 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (createError) {
-        console.error("Create donor error:", createError);
+        console.error("Create donor error - Database operation failed");
         return NextResponse.json(
-          { error: "Failed to create donor" },
+          { error: "Failed to process donation" },
           { status: 500 }
         );
       }
 
       donorId = newDonor.id;
     } else if (donor.error) {
-      console.error("Get donor error:", donor.error);
-      return NextResponse.json({ error: "Database error" }, { status: 500 });
+      console.error("Get donor error - Database operation failed");
+      return NextResponse.json(
+        { error: "Failed to process donation" },
+        { status: 500 }
+      );
     } else {
       donorId = donor.data.id;
     }
 
-    // Create donation record
+    // Create donation record with idempotency key
+    const idempotencyKey = `${donorId}-${
+      data.email
+    }-${amountInPaise}-${Math.floor(Date.now() / 60000)}`;
+
+    const donationPayload: any = {
+      donor_id: donorId,
+      amount: data.amount,
+      currency: "INR",
+      message: data.message || null,
+      status: "pending",
+      receipt_sent: false,
+    };
+
+    // Add idempotency key if needed (will be ignored if column doesn't exist)
+    if (process.env.NODE_ENV === "production") {
+      donationPayload.idempotency_key = idempotencyKey;
+    }
+
     const { data: donation, error: donationError } = await supabase
       .from("donations")
-      .insert([
-        {
-          donor_id: donorId,
-          amount: data.amount,
-          currency: "INR",
-          message: data.message,
-          status: "pending",
-          receipt_sent: false,
-        },
-      ])
+      .insert([donationPayload])
       .select()
       .single();
 
     if (donationError) {
-      console.error("Create donation error:", donationError);
+      console.error("Create donation error:", {
+        code: donationError.code,
+        message: donationError.message,
+        details: donationError.details,
+        hint: donationError.hint,
+      });
       return NextResponse.json(
-        { error: "Failed to create donation" },
+        { error: "Failed to process donation" },
         { status: 500 }
       );
     }
 
     // Create Razorpay order
-    const amountInPaise = Math.round(data.amount * 100);
     const receipt = `DONATION-${donorId}-${Date.now()}`;
 
     const razorpayOrder = await createRazorpayOrder({
@@ -99,7 +144,6 @@ export async function POST(request: NextRequest) {
         donor_id: donorId,
         donation_id: donation.id,
         donor_name: data.fullName,
-        donor_email: data.email || "no-email@provided.com",
       },
     });
 
@@ -117,9 +161,9 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (paymentError) {
-      console.error("Create payment error:", paymentError);
+      console.error("Create payment error - Database operation failed");
       return NextResponse.json(
-        { error: "Failed to create payment record" },
+        { error: "Failed to process donation" },
         { status: 500 }
       );
     }
@@ -130,17 +174,13 @@ export async function POST(request: NextRequest) {
       amount: data.amount,
       key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       donor_name: data.fullName,
-      donor_email: data.email,
       donation_id: donation.id,
       payment_id: payment.id,
     });
   } catch (error) {
-    console.error("Donation creation error:", error);
+    console.error("Donation creation error - System error occurred");
     return NextResponse.json(
-      {
-        error: "Internal server error",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to process donation request" },
       { status: 500 }
     );
   }

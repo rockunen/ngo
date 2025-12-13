@@ -29,6 +29,7 @@ export default function DonationForm({
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm<DonationFormData>({
     resolver: zodResolver(donationFormSchema),
   });
@@ -39,6 +40,7 @@ export default function DonationForm({
 
   const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount);
+    setValue("amount", amount);
   };
 
   const onSubmit = async (data: DonationFormData) => {
@@ -97,8 +99,12 @@ export default function DonationForm({
               throw new Error("Payment verification failed");
             }
 
-            // Success!
-            onSuccess?.(donation_id);
+            const verifyData = await verifyResponse.json();
+
+            // Success - show thank you page
+            if (verifyData.success) {
+              window.location.href = `/donate/success?donation_id=${donation_id}`;
+            }
           } catch (error) {
             setError("Payment verification failed. Please contact support.");
             console.error("Verification error:", error);
@@ -106,7 +112,10 @@ export default function DonationForm({
         },
         modal: {
           ondismiss: () => {
-            setError("Payment cancelled. Please try again.");
+            setError(
+              "❌ Payment cancelled. Please try again or contact support if you need help."
+            );
+            setIsLoading(false);
           },
         },
       };
@@ -209,13 +218,13 @@ export default function DonationForm({
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Phone
+              📱 Phone Number (Optional)
             </label>
             <input
               type="tel"
+              placeholder="Enter your phone number"
               {...register("phone")}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
-              placeholder="10-digit phone number"
             />
             {errors.phone && (
               <p className="text-red-600 text-sm mt-2 font-medium">

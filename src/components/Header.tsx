@@ -39,7 +39,10 @@ export default function Header() {
         <Link href="/" className="nav-link hover:text-orange-600 transition">
           Home
         </Link>
-        <Link href="/about" className="nav-link hover:text-orange-600 transition">
+        <Link
+          href="/about"
+          className="nav-link hover:text-orange-600 transition"
+        >
           About Us
         </Link>
         <div className="group relative">
@@ -73,13 +76,22 @@ export default function Header() {
             </Link>
           </div>
         </div>
-        <Link href="/internship" className="nav-link hover:text-orange-600 transition">
+        <Link
+          href="/internship"
+          className="nav-link hover:text-orange-600 transition"
+        >
           Social Internship
         </Link>
-        <Link href="/gallery" className="nav-link hover:text-orange-600 transition">
+        <Link
+          href="/gallery"
+          className="nav-link hover:text-orange-600 transition"
+        >
           Gallery
         </Link>
-        <Link href="/contact" className="nav-link hover:text-orange-600 transition">
+        <Link
+          href="/contact"
+          className="nav-link hover:text-orange-600 transition"
+        >
           Contact
         </Link>
         <Link href="/donate" className="btn-primary text-sm px-5 py-2">
@@ -89,7 +101,10 @@ export default function Header() {
 
       {/* Mobile Menu Button */}
       <div className="md:hidden flex items-center gap-3">
-        <Link href="/donate" className="btn-primary text-xs px-3 py-1.5 rounded">
+        <Link
+          href="/donate"
+          className="btn-primary text-xs px-3 py-1.5 rounded"
+        >
           Donate
         </Link>
         <button
