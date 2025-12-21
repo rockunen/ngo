@@ -31,9 +31,7 @@ export default function Carousel({
   };
 
   const goToPrevious = () => {
-    setCurrentSlide((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
-    );
+    setCurrentSlide((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const goToNext = () => {

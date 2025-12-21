@@ -22,9 +22,7 @@ export async function POST(request: NextRequest) {
       );
 
       if (!isValid) {
-        console.error(
-          `Invalid signature for payment: ${razorpay_payment_id}`
-        );
+        console.error(`Invalid signature for payment: ${razorpay_payment_id}`);
         return NextResponse.json(
           { error: "Invalid signature" },
           { status: 400 }
@@ -41,9 +39,7 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (fetchError || !donation) {
-        console.error(
-          `Donation not found for order: ${razorpay_order_id}`
-        );
+        console.error(`Donation not found for order: ${razorpay_order_id}`);
         return NextResponse.json(
           { error: "Donation not found" },
           { status: 404 }
@@ -92,8 +88,7 @@ export async function POST(request: NextRequest) {
 
     // Handle payment failed event
     if (event === "payment.failed") {
-      const { razorpay_payment_id, razorpay_order_id, error } =
-        payload.payment;
+      const { razorpay_payment_id, razorpay_order_id, error } = payload.payment;
 
       const supabase = supabaseServer();
 
