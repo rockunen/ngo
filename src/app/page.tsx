@@ -16,7 +16,7 @@ export default function HomePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-pink-500"></div>
       </div>
     );
   }
@@ -52,7 +52,7 @@ export default function HomePage() {
         "Providing nutritious meals to those in need, ensuring no one goes hungry.",
       link: "/causes/food",
       image: "/assests/01(1).png",
-      color: "border-red-500",
+      color: "border-pink-500",
     },
     {
       icon: "📚",
@@ -124,12 +124,12 @@ export default function HomePage() {
     {
       question: "Where is Get Wish Foundation Located?",
       answer:
-        "We are headquartered at G76, Noida Sector 63, Uttar Pradesh, India. We operate across 25+ states nationwide.",
+        "We are headquartered at Subedargunj, Prayagraj, Uttar Pradesh, India. We operate across 25+ states nationwide.",
     },
     {
       question: "How Can I Volunteer?",
       answer:
-        "Join our social internship program or contact us at info@saveranationaltrust.org to discuss volunteer opportunities.",
+        "Join our social internship program or contact us at info@getWishFoundation.in to discuss volunteer opportunities.",
     },
   ];
 
@@ -167,7 +167,7 @@ export default function HomePage() {
                         word === "Caring" ||
                         word === "Nature" ||
                         word === "Rescue" ? (
-                          <span key={i} className="text-orange-500">
+                          <span key={i} className="text-pink-500">
                             {word}{" "}
                           </span>
                         ) : (
@@ -177,7 +177,7 @@ export default function HomePage() {
                     </h1>
                     <Link
                       href="/donate"
-                      className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded transition font-bold"
+                      className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded transition font-bold"
                     >
                       ❤️ Donate Now
                     </Link>
@@ -195,7 +195,7 @@ export default function HomePage() {
               key={idx}
               onClick={() => setActiveCarousel(idx)}
               className={`w-3 h-3 rounded-full transition ${
-                idx === activeCarousel ? "bg-orange-500" : "bg-gray-600"
+                idx === activeCarousel ? "bg-pink-500" : "bg-gray-600"
               }`}
             />
           ))}
@@ -207,11 +207,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6 mb-6">
             <div>
-              <strong>Niti Ayog: UP/2024/0445268</strong>
+              <strong>Niti Ayog: UP/20XX/XXXXXXX</strong>
             </div>
             <div className="md:col-span-2">
               Tax exempted under Section 80G/12A of Income tax Vide Registration
-              No: ABJTS8249PE2024101
+              No: XXXXXXXXXXXXXXX
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
@@ -234,11 +234,9 @@ export default function HomePage() {
       {/* About Section */}
       <section className="py-16 px-4">
         <div className="max-w-5xl mx-auto text-center">
-          <span className="text-orange-500 font-semibold text-lg">
-            About Us
-          </span>
+          <span className="text-pink-500 font-semibold text-lg">About Us</span>
           <h2 className="text-4xl font-bold my-4">Get Wish Foundation</h2>
-          <div className="w-24 h-1 bg-orange-500 mx-auto mb-8"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-pink-700 mx-auto mb-8"></div>
           <p className="text-gray-700 text-lg leading-relaxed">
             Get Wish Foundation is a non-profit organization dedicated to
             empowering communities and creating sustainable development
@@ -262,13 +260,13 @@ export default function HomePage() {
           <h2 className="text-4xl font-bold text-center mb-4">
             Our Focus Areas
           </h2>
-          <div className="w-24 h-1 bg-orange-500 mx-auto mb-12"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-pink-700 mx-auto mb-12"></div>
           <div className="grid md:grid-cols-2 gap-8">
             {focusAreas.map((area, idx) => (
               <Link
                 key={idx}
                 href={area.link}
-                className="card overflow-hidden border-l-4 border-gray-200 hover:shadow-xl hover:border-orange-500 transition cursor-pointer group flex flex-col"
+                className="card overflow-hidden border-l-4 border-gray-200 hover:shadow-xl hover:border-pink-500 transition cursor-pointer group flex flex-col"
               >
                 <div className="w-full h-56 overflow-hidden bg-gray-200 flex items-center justify-center">
                   <img
@@ -280,14 +278,14 @@ export default function HomePage() {
                 <div className="p-6 space-y-4 flex-grow flex flex-col">
                   <div className="flex items-start gap-3">
                     <div className="text-4xl flex-shrink-0">{area.icon}</div>
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-600 transition">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-pink-600 transition">
                       {area.title}
                     </h3>
                   </div>
                   <p className="text-gray-700 leading-relaxed">
                     {area.description}
                   </p>
-                  <span className="text-orange-600 font-semibold group-hover:translate-x-1 transition inline-block mt-auto">
+                  <span className="text-pink-600 font-semibold group-hover:translate-x-1 transition inline-block mt-auto">
                     Learn More →
                   </span>
                 </div>
@@ -301,8 +299,8 @@ export default function HomePage() {
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-4">Our Impact</h2>
-          <div className="w-24 h-1 bg-orange-500 mx-auto mb-12"></div>
-          <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-2xl p-8 md:p-12">
+          <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-pink-700 mx-auto mb-12"></div>
+          <div className="bg-gradient-to-r from-pink-500 to-pink-700 text-white rounded-2xl p-8 md:p-12">
             <div className="grid md:grid-cols-4 gap-8">
               {stats.map((item, i) => (
                 <div key={i} className="text-center">
@@ -312,7 +310,7 @@ export default function HomePage() {
                     className="w-16 h-16 mx-auto mb-4 invert"
                   />
                   <h3 className="text-4xl font-bold mb-2">{item.stat}</h3>
-                  <p className="text-orange-100">{item.label}</p>
+                  <p className="text-pink-100">{item.label}</p>
                 </div>
               ))}
             </div>
@@ -326,7 +324,7 @@ export default function HomePage() {
           <h2 className="text-4xl font-bold text-center mb-4">
             Our Core Values
           </h2>
-          <div className="w-24 h-1 bg-orange-500 mx-auto mb-12"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-pink-700 mx-auto mb-12"></div>
           <div className="grid md:grid-cols-4 gap-6">
             {[
               {
@@ -352,10 +350,10 @@ export default function HomePage() {
             ].map((value, i) => (
               <div
                 key={i}
-                className="card p-6 space-y-3 border-l-4 border-orange-500 hover:shadow-lg transition text-center"
+                className="card p-6 space-y-3 border-l-4 border-pink-500 hover:shadow-lg transition text-center"
               >
                 <div className="text-4xl">{value.icon}</div>
-                <h3 className="text-lg font-bold text-orange-700">
+                <h3 className="text-lg font-bold text-pink-700">
                   {value.title}
                 </h3>
                 <p className="text-gray-700 text-sm">{value.desc}</p>
@@ -369,17 +367,17 @@ export default function HomePage() {
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-4">FAQ</h2>
-          <div className="w-24 h-1 bg-orange-500 mx-auto mb-12"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-pink-700 mx-auto mb-12"></div>
           <div className="space-y-4">
             {faqItems.map((item, idx) => (
               <div key={idx} className="card overflow-hidden border">
                 <button
                   onClick={() => setActiveFAQ(activeFAQ === idx ? -1 : idx)}
-                  className="w-full p-4 text-left font-semibold flex justify-between items-center hover:bg-orange-50 transition"
+                  className="w-full p-4 text-left font-semibold flex justify-between items-center hover:bg-pink-50 transition"
                 >
                   {item.question}
                   <span
-                    className={`transform transition text-orange-500 ${
+                    className={`transform transition text-pink-500 ${
                       activeFAQ === idx ? "rotate-180" : ""
                     }`}
                   >
@@ -410,19 +408,19 @@ export default function HomePage() {
           <h2 className="text-3xl md:text-4xl font-bold">
             Ready to Make a Difference?
           </h2>
-          <p className="text-lg text-orange-100">
+          <p className="text-lg text-pink-100">
             Join us in creating meaningful change in communities across India
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/donate"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-bold transition inline-block"
+              className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-lg font-bold transition inline-block"
             >
               Donate Now
             </Link>
             <Link
               href="/internship"
-              className="inline-block bg-white text-orange-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition"
+              className="inline-block bg-white text-pink-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition"
             >
               Join Our Team
             </Link>

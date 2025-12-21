@@ -10,9 +10,9 @@ export default function Footer() {
           {/* About Section */}
           <div>
             <p className="text-sm">
-              <strong>About Get Wish Foundation:</strong> Savera National Trust
-              is a non-profit organization established with a mission to
-              alleviate the suffering within our community.
+              <strong>About Get Wish Foundation:</strong> Get Wish Foundation is
+              a non-profit organization established with a mission to alleviate
+              the suffering within our community.
             </p>
           </div>
 
@@ -21,14 +21,14 @@ export default function Footer() {
             <div className="flex gap-3">
               <span>✉️</span>
               <div>
-                <p>info@saveranationaltrust.org</p>
+                <p>info@getWishFoundation.in</p>
               </div>
             </div>
             <div className="flex gap-3">
               <span>🏠</span>
               <div>
                 <p>
-                  G76, Noida Sector 63,
+                  Subedargunj, Prayagraj
                   <br />
                   Uttar Pradesh, India
                 </p>
@@ -43,7 +43,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/intern-signup"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-pink-500 transition"
                 >
                   Intern Signup
                 </Link>
@@ -51,7 +51,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/intern-login"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-pink-500 transition"
                 >
                   Intern Login
                 </Link>
@@ -60,16 +60,13 @@ export default function Footer() {
               <li>
                 <Link
                   href="/manager-login"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-pink-500 transition"
                 >
                   Manager Login
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/donate"
-                  className="hover:text-orange-500 transition"
-                >
+                <Link href="/donate" className="hover:text-pink-500 transition">
                   Donation
                 </Link>
               </li>
@@ -81,40 +78,39 @@ export default function Footer() {
             <p className="font-bold mb-3">Useful Links:</p>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-orange-500 transition">
+                <Link href="/" className="hover:text-pink-500 transition">
                   Home
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/about"
-                  className="hover:text-orange-500 transition"
-                >
+                <Link href="/about" className="hover:text-pink-500 transition">
                   About Us
                 </Link>
               </li>
               <li>
                 <Link
                   href="/internship"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-pink-500 transition"
                 >
                   Internship
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/terms"
-                  className="hover:text-orange-500 transition"
-                >
+                <Link href="/terms" className="hover:text-pink-500 transition">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
                 <Link
                   href="/privacy"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-pink-500 transition"
                 >
                   Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/refund" className="hover:text-pink-500 transition">
+                  Refund Policy
                 </Link>
               </li>
             </ul>
@@ -125,7 +121,7 @@ export default function Footer() {
         <div className="border-t border-gray-700 pt-6 text-center text-sm">
           <p>
             &copy; 2025{" "}
-            <Link href="/" className="hover:text-orange-500 transition">
+            <Link href="/" className="hover:text-pink-500 transition">
               Get Wish Foundation
             </Link>{" "}
             Creation By{" "}
@@ -133,7 +129,7 @@ export default function Footer() {
               href="mailto:aamanprime@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-orange-500 transition"
+              className="hover:text-pink-500 transition"
             >
               Aaman
             </a>

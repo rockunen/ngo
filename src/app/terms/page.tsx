@@ -4,12 +4,12 @@ export default function Terms() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-red-600 py-12 md:py-16 px-4 md:px-6">
+      <section className="bg-pink-600 py-12 md:py-16 px-4 md:px-6">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Terms & Conditions
           </h1>
-          <p className="text-lg text-red-50">
+          <p className="text-lg text-pink-50">
             Please read these terms carefully before using our website
           </p>
         </div>
@@ -98,9 +98,9 @@ export default function Terms() {
                 The materials appearing on Get Wish Foundation website could
                 include technical, typographical, or photographic errors. Savera
                 National Trust does not warrant that any of the materials on
-                this website are accurate, complete, or current. Savera National
-                Trust may make changes to the materials contained on this
-                website at any time without notice.
+                this website are accurate, complete, or current.
+                getWishFoundationNational Trust may make changes to the
+                materials contained on this website at any time without notice.
               </p>
             </div>
 
@@ -140,12 +140,12 @@ export default function Terms() {
               </p>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 mt-8">
+            <div className="bg-pink-50 border border-red-200 rounded-lg p-6 mt-8">
               <p className="text-gray-700">
                 For any questions regarding these Terms & Conditions, please{" "}
                 <Link
                   href="/contact"
-                  className="text-red-600 font-bold hover:text-red-700"
+                  className="text-pink-600 font-bold hover:text-pink-700"
                 >
                   contact us
                 </Link>

@@ -21,7 +21,7 @@ export default function Contact() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-pink-500"></div>
       </div>
     );
   }
@@ -46,7 +46,7 @@ export default function Contact() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section
-        className="bg-red-600 py-12 md:py-16 px-4 md:px-6 relative"
+        className="bg-pink-600 py-12 md:py-16 px-4 md:px-6 relative"
         style={{
           backgroundImage: "url(/assests/6.jpg)",
           backgroundSize: "cover",
@@ -58,7 +58,7 @@ export default function Contact() {
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Get In Touch
           </h1>
-          <p className="text-lg text-red-50">
+          <p className="text-lg text-pink-50">
             Have questions? We'd love to hear from you.
           </p>
         </div>
@@ -75,7 +75,7 @@ export default function Contact() {
                   <span className="text-3xl">📍</span> Office Address
                 </h3>
                 <p className="text-gray-700 ml-12">
-                  G76, Noida Sector 63,
+                  Subedargunj, Prayagraj,
                   <br />
                   Uttar Pradesh, India
                 </p>
@@ -86,10 +86,10 @@ export default function Contact() {
                   <span className="text-3xl">📧</span> Email
                 </h3>
                 <a
-                  href="mailto:info@saveranationaltrust.org"
-                  className="text-red-600 hover:text-red-700 font-semibold ml-12"
+                  href="mailto:info@getWishFoundation.in"
+                  className="text-pink-600 hover:text-pink-700 font-semibold ml-12"
                 >
-                  info@saveranationaltrust.org
+                  info@getWishFoundation.in
                 </a>
               </div>
 
@@ -109,10 +109,10 @@ export default function Contact() {
                   <span className="text-3xl">🌐</span> Website
                 </h3>
                 <a
-                  href="https://saveranationaltrust.org"
-                  className="text-red-600 hover:text-red-700 font-semibold ml-12"
+                  href="https://getWishFoundation.in"
+                  className="text-pink-600 hover:text-pink-700 font-semibold ml-12"
                 >
-                  saveranationaltrust.org
+                  getWishFoundation.in
                 </a>
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function Contact() {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                         placeholder="Your Name"
                       />
                     </div>
@@ -157,7 +157,7 @@ export default function Contact() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                         placeholder="your@email.com"
                       />
                     </div>
@@ -173,7 +173,7 @@ export default function Contact() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                         placeholder="+91 XXXXX XXXXX"
                       />
                     </div>
@@ -187,7 +187,7 @@ export default function Contact() {
                         value={formData.subject}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                         placeholder="How can we help?"
                       />
                     </div>
@@ -203,14 +203,14 @@ export default function Contact() {
                       onChange={handleChange}
                       required
                       rows={5}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent resize-none"
                       placeholder="Your message here..."
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700 transition-all text-lg"
+                    className="w-full bg-pink-600 text-white py-3 rounded-lg font-bold hover:bg-pink-700 transition-all text-lg"
                   >
                     Send Message
                   </button>
@@ -244,7 +244,7 @@ export default function Contact() {
                 icon: "👨‍💼",
                 title: "Manager Login",
                 desc: "Staff portal",
-                link: "#",
+                link: "/manager-login",
               },
             ].map((link, i) => (
               <a

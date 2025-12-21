@@ -19,7 +19,7 @@ export default function Food() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             🥗 Food & Nutrition
           </h1>
-          <p className="text-lg md:text-xl text-orange-100">
+          <p className="text-lg md:text-xl text-pink-100">
             Ensuring no one sleeps hungry
           </p>
         </div>
@@ -75,12 +75,12 @@ export default function Food() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="p-6 border-l-4 border-orange-500 bg-gray-50 hover:shadow-lg transition rounded"
+                  className="p-6 border-l-4 border-pink-500 bg-gray-50 hover:shadow-lg transition rounded"
                 >
                   <div className="flex items-start gap-4">
                     <span className="text-4xl">{item.icon}</span>
                     <div>
-                      <h3 className="text-xl font-bold text-orange-600 mb-2">
+                      <h3 className="text-xl font-bold text-pink-600 mb-2">
                         {item.title}
                       </h3>
                       <p className="text-gray-700 leading-relaxed">
@@ -94,25 +94,23 @@ export default function Food() {
           </div>
 
           {/* Impact */}
-          <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-8 md:p-12 border border-orange-200">
-            <h2 className="text-2xl md:text-3xl font-bold text-orange-900 mb-6">
+          <div className="bg-gradient-to-r from-pink-50 to-pink-50 rounded-2xl p-8 md:p-12 border border-pink-200">
+            <h2 className="text-2xl md:text-3xl font-bold text-pink-900 mb-6">
               Our Impact
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-4xl font-bold text-orange-600 mb-2">
-                  2M+
-                </div>
+                <div className="text-4xl font-bold text-pink-600 mb-2">2M+</div>
                 <p className="text-gray-700">Meals Served</p>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-orange-600 mb-2">
+                <div className="text-4xl font-bold text-pink-600 mb-2">
                   50K+
                 </div>
                 <p className="text-gray-700">Families Supported</p>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-orange-600 mb-2">
+                <div className="text-4xl font-bold text-pink-600 mb-2">
                   10K+
                 </div>
                 <p className="text-gray-700">Children Nourished</p>
@@ -121,13 +119,13 @@ export default function Food() {
           </div>
 
           {/* How to Help */}
-          <div className="border-2 border-orange-300 rounded-2xl p-8 md:p-12 bg-white">
+          <div className="border-2 border-pink-300 rounded-2xl p-8 md:p-12 bg-white">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
               How You Can Help
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-3 p-4 bg-orange-50 rounded-lg">
-                <h3 className="text-xl font-bold text-orange-600">
+              <div className="space-y-3 p-4 bg-pink-50 rounded-lg">
+                <h3 className="text-xl font-bold text-pink-600">
                   Sponsor Meals
                 </h3>
                 <p className="text-gray-700">
@@ -135,19 +133,19 @@ export default function Food() {
                 </p>
                 <Link
                   href="/donate"
-                  className="inline-block text-orange-600 font-semibold hover:text-orange-700 transition"
+                  className="inline-block text-pink-600 font-semibold hover:text-pink-700 transition"
                 >
                   Donate Now →
                 </Link>
               </div>
-              <div className="space-y-3 p-4 bg-orange-50 rounded-lg">
-                <h3 className="text-xl font-bold text-orange-600">Volunteer</h3>
+              <div className="space-y-3 p-4 bg-pink-50 rounded-lg">
+                <h3 className="text-xl font-bold text-pink-600">Volunteer</h3>
                 <p className="text-gray-700">
                   Help us cook and distribute meals in your locality.
                 </p>
                 <Link
                   href="/internship"
-                  className="inline-block text-orange-600 font-semibold hover:text-orange-700 transition"
+                  className="inline-block text-pink-600 font-semibold hover:text-pink-700 transition"
                 >
                   Join Us →
                 </Link>
@@ -171,18 +169,17 @@ export default function Food() {
           <h2 className="text-3xl md:text-4xl font-bold">
             Together, We Can End Hunger
           </h2>
-          <p className="text-lg text-orange-100">
+          <p className="text-lg text-pink-100">
             Support our mission to provide nutritious food to all
           </p>
           <Link
             href="/donate"
-            className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl text-lg"
+            className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl text-lg"
           >
             Support Nutrition
           </Link>
         </div>
       </section>
-
     </main>
   );
 }

@@ -71,7 +71,7 @@ export default function ManagerLoginPage() {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-600/90 to-orange-700/90"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-600/90 to-pink-700/90"></div>
         <div className="relative max-w-6xl mx-auto px-4 text-center">
           <div className="space-y-4">
             <h1 className="text-5xl md:text-6xl font-bold text-white drop-shadow-lg">
@@ -98,14 +98,14 @@ export default function ManagerLoginPage() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <div className="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-500 text-red-700 p-4 rounded-lg font-medium">
+                  <div className="bg-gradient-to-r from-pink-50 to-pink-50 border-2 border-pink-500 text-pink-700 p-4 rounded-lg font-medium">
                     {error}
                   </div>
                 )}
 
                 <div className="space-y-2">
-                  <label className="block font-semibold text-orange-900">
-                    Email Address <span className="text-red-500">*</span>
+                  <label className="block font-semibold text-pink-900">
+                    Email Address <span className="text-pink-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -121,7 +121,7 @@ export default function ManagerLoginPage() {
 
                 <div className="space-y-2">
                   <label className="block font-semibold text-slate-700">
-                    Password <span className="text-red-500">*</span>
+                    Password <span className="text-pink-500">*</span>
                   </label>
                   <input
                     type="password"

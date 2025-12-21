@@ -22,31 +22,34 @@ export default function Header() {
   };
 
   return (
-    <nav className="flex justify-between items-center px-4 md:px-6 py-4 border-b border-gray-200 sticky top-0 bg-white/95 backdrop-blur z-50 shadow-sm">
+    <nav className="flex justify-between items-center px-4 md:px-6 py-1 border-b border-gray-200 sticky top-0 bg-white/95 backdrop-blur z-50 shadow-sm">
       {/* Logo */}
-      <Link href="/" onClick={closeMobileMenu}>
+      <Link href="/" onClick={closeMobileMenu} className="flex-shrink-0">
         <Image
           src="/assests/logo.png"
           alt="logo"
-          height={48}
-          width={48}
-          className="h-12 w-auto"
+          height={32}
+          width={256}
+          priority
+          quality={100}
+          className="h-32 w-48 object-contain"
+          style={{
+            maxWidth: "100%",
+            height: "50%",
+          }}
         />
       </Link>
 
       {/* Desktop Menu */}
       <div className="hidden md:flex gap-8 items-center text-sm">
-        <Link href="/" className="nav-link hover:text-orange-600 transition">
+        <Link href="/" className="nav-link hover:text-pink-600 transition">
           Home
         </Link>
-        <Link
-          href="/about"
-          className="nav-link hover:text-orange-600 transition"
-        >
+        <Link href="/about" className="nav-link hover:text-pink-600 transition">
           About Us
         </Link>
         <div className="group relative">
-          <button className="nav-link hover:text-orange-600 transition">
+          <button className="nav-link hover:text-pink-600 transition">
             Causes ▼
           </button>
           <div className="hidden group-hover:block absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
@@ -78,19 +81,19 @@ export default function Header() {
         </div>
         <Link
           href="/internship"
-          className="nav-link hover:text-orange-600 transition"
+          className="nav-link hover:text-pink-600 transition"
         >
           Social Internship
         </Link>
         <Link
           href="/gallery"
-          className="nav-link hover:text-orange-600 transition"
+          className="nav-link hover:text-pink-600 transition"
         >
           Gallery
         </Link>
         <Link
           href="/contact"
-          className="nav-link hover:text-orange-600 transition"
+          className="nav-link hover:text-pink-600 transition"
         >
           Contact
         </Link>
@@ -143,14 +146,14 @@ export default function Header() {
           <div className="px-4 py-4 space-y-3">
             <Link
               href="/"
-              className="block text-gray-900 hover:text-orange-600 font-semibold py-2 transition"
+              className="block text-gray-900 hover:text-pink-600 font-semibold py-2 transition"
               onClick={closeMobileMenu}
             >
               Home
             </Link>
             <Link
               href="/about"
-              className="block text-gray-900 hover:text-orange-600 font-semibold py-2 transition"
+              className="block text-gray-900 hover:text-pink-600 font-semibold py-2 transition"
               onClick={closeMobileMenu}
             >
               About Us
@@ -160,7 +163,7 @@ export default function Header() {
             <div>
               <button
                 onClick={toggleCausesDropdown}
-                className="w-full text-left text-gray-900 hover:text-orange-600 font-semibold py-2 transition flex items-center justify-between"
+                className="w-full text-left text-gray-900 hover:text-pink-600 font-semibold py-2 transition flex items-center justify-between"
               >
                 Causes
                 <span
@@ -172,31 +175,31 @@ export default function Header() {
                 </span>
               </button>
               {causesDropdownOpen && (
-                <div className="pl-4 space-y-2 mt-2 border-l-2 border-orange-300">
+                <div className="pl-4 space-y-2 mt-2 border-l-2 border-pink-300">
                   <Link
                     href="/causes/animals"
-                    className="block text-gray-700 hover:text-orange-600 py-1.5 transition"
+                    className="block text-gray-700 hover:text-pink-600 py-1.5 transition"
                     onClick={closeMobileMenu}
                   >
                     Animals
                   </Link>
                   <Link
                     href="/causes/education"
-                    className="block text-gray-700 hover:text-orange-600 py-1.5 transition"
+                    className="block text-gray-700 hover:text-pink-600 py-1.5 transition"
                     onClick={closeMobileMenu}
                   >
                     Education & Skills
                   </Link>
                   <Link
                     href="/causes/environment"
-                    className="block text-gray-700 hover:text-orange-600 py-1.5 transition"
+                    className="block text-gray-700 hover:text-pink-600 py-1.5 transition"
                     onClick={closeMobileMenu}
                   >
                     Environment
                   </Link>
                   <Link
                     href="/causes/food"
-                    className="block text-gray-700 hover:text-orange-600 py-1.5 transition"
+                    className="block text-gray-700 hover:text-pink-600 py-1.5 transition"
                     onClick={closeMobileMenu}
                   >
                     Food & Nutrition
@@ -207,21 +210,21 @@ export default function Header() {
 
             <Link
               href="/internship"
-              className="block text-gray-900 hover:text-orange-600 font-semibold py-2 transition"
+              className="block text-gray-900 hover:text-pink-600 font-semibold py-2 transition"
               onClick={closeMobileMenu}
             >
               Social Internship
             </Link>
             <Link
               href="/gallery"
-              className="block text-gray-900 hover:text-orange-600 font-semibold py-2 transition"
+              className="block text-gray-900 hover:text-pink-600 font-semibold py-2 transition"
               onClick={closeMobileMenu}
             >
               Gallery
             </Link>
             <Link
               href="/contact"
-              className="block text-gray-900 hover:text-orange-600 font-semibold py-2 transition"
+              className="block text-gray-900 hover:text-pink-600 font-semibold py-2 transition"
               onClick={closeMobileMenu}
             >
               Contact

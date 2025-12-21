@@ -19,7 +19,7 @@ export default function Education() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             🎓 Education & Skill Development
           </h1>
-          <p className="text-lg md:text-xl text-orange-100">
+          <p className="text-lg md:text-xl text-pink-100">
             Empowering minds, building futures
           </p>
         </div>
@@ -169,18 +169,17 @@ export default function Education() {
           <h2 className="text-3xl md:text-4xl font-bold">
             Education is the Key to Tomorrow
           </h2>
-          <p className="text-lg text-orange-100">
+          <p className="text-lg text-pink-100">
             Help us empower the next generation with quality education
           </p>
           <Link
             href="/donate"
-            className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl text-lg"
+            className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl text-lg"
           >
             Support Education
           </Link>
         </div>
       </section>
-
     </main>
   );
 }

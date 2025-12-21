@@ -66,7 +66,7 @@ export default function ManagerDashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">Not authenticated</p>
+          <p className="text-pink-600 mb-4">Not authenticated</p>
           <Link
             href="/manager-login"
             className="text-blue-600 font-semibold hover:underline"
@@ -91,7 +91,7 @@ export default function ManagerDashboard() {
           </div>
           <button
             onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg"
+            className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-lg"
           >
             Logout
           </button>

@@ -194,11 +194,11 @@
 
 /* Gradient Background */
 .gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #fd3881 0%, #d70958 100%);
 }
 
 .gradient-header {
-  background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+  background: linear-gradient(135deg, #fd3881 0%, #d70958 100%);
 }
 
 /* Card Styles */
@@ -215,7 +215,7 @@
 
 /* Button Animations */
 .btn-primary {
-  background-color: #f97316;
+  background-color: #fd3881;
   color: white;
   padding: 0.5rem 1.5rem;
   border-radius: 0.5rem;
@@ -228,9 +228,9 @@
 }
 
 .btn-primary:hover {
-  background-color: #ea580c;
+  background-color: #d70958;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 5px 15px rgba(253, 56, 129, 0.3);
 }
 
 /* Responsive Animation Delays */

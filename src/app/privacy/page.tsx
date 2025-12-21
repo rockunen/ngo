@@ -4,12 +4,12 @@ export default function Privacy() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-red-600 py-12 md:py-16 px-4 md:px-6">
+      <section className="bg-pink-600 py-12 md:py-16 px-4 md:px-6">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Privacy Policy
           </h1>
-          <p className="text-lg text-red-50">
+          <p className="text-lg text-pink-50">
             Your privacy is important to us. Learn how we protect your data.
           </p>
         </div>
@@ -100,10 +100,10 @@ export default function Privacy() {
                 information. You can also opt-out of our mailing list at any
                 time. To exercise these rights, please contact us at{" "}
                 <a
-                  href="mailto:info@saveranationaltrust.org"
-                  className="text-red-600 font-bold hover:text-red-700"
+                  href="mailto:info@getWishFoundation.in"
+                  className="text-pink-600 font-bold hover:text-pink-700"
                 >
-                  info@saveranationaltrust.org
+                  info@getWishFoundation.in
                 </a>
                 .
               </p>
@@ -130,7 +130,7 @@ export default function Privacy() {
                 practices, please{" "}
                 <Link
                   href="/contact"
-                  className="text-red-600 font-bold hover:text-red-700"
+                  className="text-pink-600 font-bold hover:text-pink-700"
                 >
                   contact us
                 </Link>
@@ -138,7 +138,7 @@ export default function Privacy() {
               </p>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 mt-8">
+            <div className="bg-pink-50 border border-red-200 rounded-lg p-6 mt-8">
               <p className="text-sm text-gray-700">
                 <strong>Last Updated:</strong> December 2024
               </p>

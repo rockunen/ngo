@@ -7,13 +7,13 @@ export default function LoadingSpinner() {
         <div className="flex flex-col items-center gap-4">
           {/* Spinner */}
           <div className="relative w-16 h-16">
-            <div className="absolute inset-0 border-4 border-orange-100 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="absolute inset-0 border-4 border-pink-100 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
-          
+
           {/* Loading Text */}
           <p className="text-gray-700 font-semibold">Loading...</p>
-          
+
           {/* Animated dots */}
           <style>{`
             @keyframes dots {

@@ -129,7 +129,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8"></h2>
       {error && (
-        <div className="mb-8 p-5 bg-red-50 border-l-4 border-red-500 text-red-800 rounded-lg">
+        <div className="mb-8 p-5 bg-pink-50 border-l-4 border-pink-500 text-pink-900 rounded-lg">
           <p className="font-semibold mb-1">Error</p>
           <p className="text-sm">{error}</p>
         </div>
@@ -147,7 +147,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
               onClick={() => handleAmountSelect(amount)}
               className={`py-3 px-4 rounded-lg font-bold transition-all transform hover:scale-105 ${
                 selectedAmount === amount
-                  ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg"
+                  ? "bg-gradient-to-r from-pink-500 to-pink-700 text-white shadow-lg"
                   : "bg-gray-100 text-gray-900 hover:bg-gray-200"
               }`}
             >
@@ -161,10 +161,10 @@ export default function DonationForm({ projectId }: DonationFormProps) {
           {...register("amount", { valueAsNumber: true })}
           min="1"
           step="1"
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-base font-semibold transition"
+          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-base font-semibold transition"
         />
         {errors.amount && (
-          <p className="text-red-600 text-sm mt-2 font-medium">
+          <p className="text-pink-600 text-sm mt-2 font-medium">
             {errors.amount.message}
           </p>
         )}
@@ -182,11 +182,11 @@ export default function DonationForm({ projectId }: DonationFormProps) {
             <input
               type="text"
               {...register("fullName")}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
               placeholder="Your full name"
             />
             {errors.fullName && (
-              <p className="text-red-600 text-sm mt-2 font-medium">
+              <p className="text-pink-600 text-sm mt-2 font-medium">
                 {errors.fullName.message}
               </p>
             )}
@@ -194,16 +194,16 @@ export default function DonationForm({ projectId }: DonationFormProps) {
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Email
+              Email *
             </label>
             <input
               type="email"
               {...register("email")}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
               placeholder="your@email.com"
             />
             {errors.email && (
-              <p className="text-red-600 text-sm mt-2 font-medium">
+              <p className="text-pink-600 text-sm mt-2 font-medium">
                 {errors.email.message}
               </p>
             )}
@@ -217,10 +217,10 @@ export default function DonationForm({ projectId }: DonationFormProps) {
               type="tel"
               placeholder="Enter your phone number"
               {...register("phone")}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
             />
             {errors.phone && (
-              <p className="text-red-600 text-sm mt-2 font-medium">
+              <p className="text-pink-600 text-sm mt-2 font-medium">
                 {errors.phone.message}
               </p>
             )}
@@ -233,7 +233,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
             <input
               type="text"
               {...register("panNumber")}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
               placeholder="Your PAN number"
             />
           </div>
@@ -241,7 +241,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
       </div>
       {/* Address Information */}
       <details className="mb-8 p-5 bg-gray-50 rounded-lg border-2 border-gray-200 group">
-        <summary className="cursor-pointer font-semibold text-gray-900 flex items-center gap-2 hover:text-green-700 transition">
+        <summary className="cursor-pointer font-semibold text-gray-900 flex items-center gap-2 hover:text-pink-700 transition">
           <span className="text-lg group-open:hidden">➕</span>
           <span className="text-lg hidden group-open:inline">➖</span>
           📍 Address Details (Optional)
@@ -251,25 +251,25 @@ export default function DonationForm({ projectId }: DonationFormProps) {
             type="text"
             {...register("address")}
             placeholder="Street address"
-            className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+            className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
           />
           <input
             type="text"
             {...register("city")}
             placeholder="City"
-            className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+            className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
           />
           <input
             type="text"
             {...register("state")}
             placeholder="State"
-            className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+            className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
           />
           <input
             type="text"
             {...register("pincode")}
             placeholder="Pincode"
-            className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+            className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
           />
         </div>
       </details>
@@ -278,7 +278,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded-lg font-bold text-lg hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-400 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+        className="w-full bg-gradient-to-r from-pink-500 to-pink-700 text-white py-4 rounded-lg font-bold text-lg hover:from-pink-600 hover:to-pink-800 disabled:from-gray-400 disabled:to-gray-400 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
       >
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
@@ -289,8 +289,8 @@ export default function DonationForm({ projectId }: DonationFormProps) {
           `Donate ₹${selectedAmount || customAmount || 0}`
         )}
       </button>
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-        <p className="text-sm text-blue-900">
+      <div className="mt-6 p-4 bg-pink-50 rounded-lg border-l-4 border-pink-500">
+        <p className="text-sm text-pink-900">
           <strong>🛡️ Your donation is secure:</strong> We use industry-standard
           encryption. 100% of your donation goes directly to conservation work.
           You'll receive a tax receipt via email.

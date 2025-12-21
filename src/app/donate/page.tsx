@@ -15,7 +15,7 @@ export default function DonatePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-pink-500"></div>
       </div>
     );
   }
@@ -37,7 +37,7 @@ export default function DonatePage() {
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
               Your Generosity Makes a Difference
             </h1>
-            <p className="text-lg md:text-xl text-orange-100 max-w-2xl leading-relaxed">
+            <p className="text-lg md:text-xl text-pink-100 max-w-2xl leading-relaxed">
               Every donation helps us create meaningful impact in communities
               across India.
             </p>
@@ -120,7 +120,7 @@ export default function DonatePage() {
 
       {/* Benefits Section */}
       <div className="grid md:grid-cols-3 gap-6 mb-16 px-4 md:px-6 max-w-7xl mx-auto">
-        <div className="card p-8 text-center hover:shadow-lg hover:border-orange-300 border-t-4 border-orange-500 transition">
+        <div className="card p-8 text-center hover:shadow-lg hover:border-pink-300 border-t-4 border-pink-500 transition">
           <div className="text-5xl mb-4">🛡️</div>
           <h3 className="font-bold text-gray-900 mb-3 text-lg">
             Secure Payment
@@ -131,7 +131,7 @@ export default function DonatePage() {
           </p>
         </div>
 
-        <div className="card p-8 text-center hover:shadow-lg hover:border-orange-300 border-t-4 border-red-500 transition">
+        <div className="card p-8 text-center hover:shadow-lg hover:border-pink-300 border-t-4 border-pink-500 transition">
           <div className="text-5xl mb-4">📄</div>
           <h3 className="font-bold text-gray-900 mb-3 text-lg">Tax Receipt</h3>
           <p className="text-gray-700 text-sm leading-relaxed">
@@ -139,7 +139,7 @@ export default function DonatePage() {
           </p>
         </div>
 
-        <div className="card p-8 text-center hover:shadow-lg hover:border-orange-300 border-t-4 border-orange-400 transition">
+        <div className="card p-8 text-center hover:shadow-lg hover:border-pink-300 border-t-4 border-pink-400 transition">
           <div className="text-5xl mb-4">❤️</div>
           <h3 className="font-bold text-gray-900 mb-3 text-lg">
             100% Transparent
@@ -153,8 +153,8 @@ export default function DonatePage() {
 
       {/* Why Donate Section with Image */}
       <div className="grid md:grid-cols-2 gap-8 mb-16 items-center px-4 md:px-6 max-w-7xl mx-auto">
-        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-8 md:p-10 border border-orange-200">
-          <h2 className="text-2xl md:text-3xl font-bold text-orange-700 mb-6">
+        <div className="bg-gradient-to-r from-pink-50 to-pink-50 rounded-2xl p-8 md:p-10 border border-pink-200">
+          <h2 className="text-2xl md:text-3xl font-bold text-pink-700 mb-6">
             Why Support Get Wish Foundation?
           </h2>
           <div className="space-y-4">
@@ -217,9 +217,9 @@ export default function DonatePage() {
         </h2>
         <div className="space-y-6">
           <details className="border-b border-gray-200 pb-6 cursor-pointer group">
-            <summary className="font-bold text-gray-900 hover:text-orange-700 text-lg flex items-center gap-3">
+            <summary className="font-bold text-gray-900 hover:text-pink-700 text-lg flex items-center gap-3">
               <span className="text-2xl group-open:hidden">➕</span>
-              <span className="text-2xl hidden group-open:inline text-orange-600">
+              <span className="text-2xl hidden group-open:inline text-pink-600">
                 ➖
               </span>
               Is my donation secure?
@@ -233,25 +233,24 @@ export default function DonatePage() {
           </details>
 
           <details className="border-b border-gray-200 pb-6 cursor-pointer group">
-            <summary className="font-bold text-gray-900 hover:text-orange-700 text-lg flex items-center gap-3">
+            <summary className="font-bold text-gray-900 hover:text-pink-700 text-lg flex items-center gap-3">
               <span className="text-2xl group-open:hidden">➕</span>
-              <span className="text-2xl hidden group-open:inline text-orange-600">
+              <span className="text-2xl hidden group-open:inline text-pink-600">
                 ➖
               </span>
               Can I cancel my monthly donation?
             </summary>
             <p className="text-gray-700 mt-4 leading-relaxed">
               Yes, you can cancel monthly donations anytime without penalty.
-              Simply contact us at info@saveranationaltrust.org with your
-              donation ID, and we'll process the cancellation within 2 business
-              days.
+              Simply contact us at info@getWishFoundation.in with your donation
+              ID, and we'll process the cancellation within 2 business days.
             </p>
           </details>
 
           <details className="border-b border-gray-200 pb-6 cursor-pointer group">
-            <summary className="font-bold text-gray-900 hover:text-orange-700 text-lg flex items-center gap-3">
+            <summary className="font-bold text-gray-900 hover:text-pink-700 text-lg flex items-center gap-3">
               <span className="text-2xl group-open:hidden">➕</span>
-              <span className="text-2xl hidden group-open:inline text-orange-600">
+              <span className="text-2xl hidden group-open:inline text-pink-600">
                 ➖
               </span>
               What is the 80G tax benefit?
@@ -264,9 +263,9 @@ export default function DonatePage() {
           </details>
 
           <details className="border-b border-gray-200 pb-6 cursor-pointer group">
-            <summary className="font-bold text-gray-900 hover:text-orange-700 text-lg flex items-center gap-3">
+            <summary className="font-bold text-gray-900 hover:text-pink-700 text-lg flex items-center gap-3">
               <span className="text-2xl group-open:hidden">➕</span>
-              <span className="text-2xl hidden group-open:inline text-orange-600">
+              <span className="text-2xl hidden group-open:inline text-pink-600">
                 ➖
               </span>
               Do you accept international donations?
@@ -274,15 +273,15 @@ export default function DonatePage() {
             <p className="text-gray-700 mt-4 leading-relaxed">
               Currently, we accept donations in INR. For international donors or
               alternative payment methods, please contact us at
-              info@saveranationaltrust.org. We're happy to explore options for
-              your donation.
+              info@getWishFoundation.in. We're happy to explore options for your
+              donation.
             </p>
           </details>
 
           <details className="pb-6 cursor-pointer group">
-            <summary className="font-bold text-gray-900 hover:text-orange-700 text-lg flex items-center gap-3">
+            <summary className="font-bold text-gray-900 hover:text-pink-700 text-lg flex items-center gap-3">
               <span className="text-2xl group-open:hidden">➕</span>
-              <span className="text-2xl hidden group-open:inline text-orange-600">
+              <span className="text-2xl hidden group-open:inline text-pink-600">
                 ➖
               </span>
               How are donations used?
@@ -338,18 +337,18 @@ export default function DonatePage() {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-600/85 to-red-600/85"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-600/85 to-pink-700/85"></div>
         <div className="relative max-w-4xl mx-auto text-center space-y-6">
           <h2 className="text-3xl md:text-4xl font-bold">
             Every Donation Counts
           </h2>
-          <p className="text-lg text-orange-100 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-pink-100 max-w-2xl mx-auto leading-relaxed">
             Whether it's ₹100 or ₹1,00,000, your support directly helps us
             create real change in communities.
           </p>
           <Link
             href="#donation-form"
-            className="inline-block bg-white text-orange-600 font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition"
+            className="inline-block bg-white text-pink-600 font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition"
           >
             Donate Now
           </Link>

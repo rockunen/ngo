@@ -19,7 +19,7 @@ export default function Animals() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             🐾 Animal Welfare & Protection
           </h1>
-          <p className="text-lg md:text-xl text-orange-100">
+          <p className="text-lg md:text-xl text-pink-100">
             Protecting and caring for our animal friends
           </p>
         </div>
@@ -173,12 +173,12 @@ export default function Animals() {
           <h2 className="text-3xl md:text-4xl font-bold">
             Every Animal Deserves Care and Compassion
           </h2>
-          <p className="text-lg text-orange-100">
+          <p className="text-lg text-pink-100">
             Help us protect and rescue animals in need
           </p>
           <Link
             href="/donate"
-            className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl text-lg"
+            className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl text-lg"
           >
             Support Animal Welfare
           </Link>

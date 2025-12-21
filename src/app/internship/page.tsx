@@ -21,7 +21,7 @@ export default function InternshipPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-pink-500"></div>
       </div>
     );
   }
@@ -97,7 +97,7 @@ export default function InternshipPage() {
     <main className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section
-        className="bg-gradient-to-r from-orange-500 to-red-600 text-white py-16 relative"
+        className="bg-gradient-to-r from-pink-600/85 to-pink-700/85 text-white py-16 relative"
         style={{
           backgroundImage: "url(/assests/2.jpg)",
           backgroundSize: "cover",
@@ -148,41 +148,41 @@ export default function InternshipPage() {
                 make a positive impact on the lives of those in need.
               </p>
             </div>
-            <div className="bg-gradient-to-br from-orange-100 to-red-100 p-8 rounded-lg">
-              <h3 className="text-2xl font-bold mb-6 text-orange-600">
+            <div className="bg-gradient-to-br from-pink-100 to-pink-100 p-8 rounded-lg">
+              <h3 className="text-2xl font-bold mb-6 text-pink-600">
                 Program Highlights
               </h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
-                  <span className="text-orange-500 font-bold">✓</span>
+                  <span className="text-pink-500 font-bold">✓</span>
                   <span className="text-gray-700">
                     <strong>Flexible Duration:</strong> Choose between 1-6
                     months
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-orange-500 font-bold">✓</span>
+                  <span className="text-pink-500 font-bold">✓</span>
                   <span className="text-gray-700">
                     <strong>Multiple Domains:</strong> Food, Education,
                     Environment, Animals, Health
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-orange-500 font-bold">✓</span>
+                  <span className="text-pink-500 font-bold">✓</span>
                   <span className="text-gray-700">
                     <strong>Mentorship:</strong> Guidance from experienced
                     professionals
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-orange-500 font-bold">✓</span>
+                  <span className="text-pink-500 font-bold">✓</span>
                   <span className="text-gray-700">
                     <strong>Certificate:</strong> Recognized internship
                     completion certificate
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-orange-500 font-bold">✓</span>
+                  <span className="text-pink-500 font-bold">✓</span>
                   <span className="text-gray-700">
                     <strong>Remote & On-site:</strong> Flexible work
                     arrangements
@@ -202,7 +202,7 @@ export default function InternshipPage() {
               Why Join Our Internship?
             </h2>
             <p className="text-gray-600 text-lg">
-              Discover the benefits of becoming a Savera intern
+              Discover the benefits of becoming a getWishFoundationintern
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -234,7 +234,7 @@ export default function InternshipPage() {
                 key={idx}
                 className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg"
               >
-                <span className="text-orange-500 font-bold text-2xl">✓</span>
+                <span className="text-pink-500 font-bold text-2xl">✓</span>
                 <span className="text-gray-700">{req}</span>
               </div>
             ))}
@@ -268,13 +268,13 @@ export default function InternshipPage() {
               },
             ].map((step, idx) => (
               <div key={idx} className="text-center">
-                <div className="w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                <div className="w-12 h-12 bg-pink-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                   {step.num}
                 </div>
                 <h3 className="font-bold mb-2">{step.title}</h3>
                 <p className="text-gray-600 text-sm">{step.desc}</p>
                 {idx < 3 && (
-                  <div className="hidden md:block text-orange-500 text-2xl mt-4">
+                  <div className="hidden md:block text-pink-500 text-2xl mt-4">
                     →
                   </div>
                 )}
@@ -310,7 +310,7 @@ export default function InternshipPage() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="flex flex-col">
                     <label className="font-semibold text-gray-700 mb-2">
-                      Full Name <span className="text-red-500">*</span>
+                      Full Name <span className="text-pink-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -319,12 +319,12 @@ export default function InternshipPage() {
                       onChange={handleInputChange}
                       placeholder="Enter your full name"
                       required
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label className="font-semibold text-gray-700 mb-2">
-                      Designation <span className="text-red-500">*</span>
+                      Designation <span className="text-pink-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -333,7 +333,7 @@ export default function InternshipPage() {
                       onChange={handleInputChange}
                       placeholder="e.g., Student, Recent Graduate"
                       required
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
                     />
                   </div>
                 </div>
@@ -341,7 +341,7 @@ export default function InternshipPage() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="flex flex-col">
                     <label className="font-semibold text-gray-700 mb-2">
-                      Email <span className="text-red-500">*</span>
+                      Email <span className="text-pink-500">*</span>
                     </label>
                     <input
                       type="email"
@@ -350,12 +350,12 @@ export default function InternshipPage() {
                       onChange={handleInputChange}
                       placeholder="Enter your email"
                       required
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label className="font-semibold text-gray-700 mb-2">
-                      Password <span className="text-red-500">*</span>
+                      Password <span className="text-pink-500">*</span>
                     </label>
                     <input
                       type="password"
@@ -364,14 +364,14 @@ export default function InternshipPage() {
                       onChange={handleInputChange}
                       placeholder="Create a password"
                       required
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
+                  className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
                 >
                   Register Now
                 </button>
@@ -381,7 +381,7 @@ export default function InternshipPage() {
                     Already have an account?{" "}
                     <Link
                       href="/intern-login"
-                      className="text-orange-500 font-semibold hover:underline"
+                      className="text-pink-500 font-semibold hover:underline"
                     >
                       Login Here
                     </Link>
@@ -431,7 +431,7 @@ export default function InternshipPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 px-4 bg-orange-500 text-white">
+      <section className="py-16 px-4 bg-pink-500 text-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-4">
             Ready to Make a Difference?
@@ -442,7 +442,7 @@ export default function InternshipPage() {
           </p>
           <a
             href="/intern-signup"
-            className="inline-block bg-white text-orange-500 font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition"
+            className="inline-block bg-white text-pink-500 font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition"
           >
             Apply Now
           </a>

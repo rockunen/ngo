@@ -14,7 +14,7 @@ export default function About() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-pink-500"></div>
       </div>
     );
   }
@@ -34,7 +34,7 @@ export default function About() {
         <div className="relative max-w-4xl mx-auto">
           <div className="bg-black/50 p-8 md:p-10 rounded-lg backdrop-blur-sm w-fit">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">About Us</h1>
-            <p className="text-lg md:text-xl text-orange-100">
+            <p className="text-lg md:text-xl text-pink-100">
               Learn about our mission and impact
             </p>
           </div>
@@ -63,7 +63,7 @@ export default function About() {
               </p>
               <Link
                 href="/donate"
-                className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-bold transition"
+                className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-lg font-bold transition"
               >
                 Support Our Mission
               </Link>
@@ -78,10 +78,10 @@ export default function About() {
           </div>
 
           {/* Vision Section with Gradient */}
-          <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-8 md:p-12 border border-orange-200">
+          <div className="bg-gradient-to-r from-pink-50 to-pink-50 rounded-2xl p-8 md:p-12 border border-pink-200">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-orange-900 mb-6">
+                <h2 className="text-3xl md:text-4xl font-bold text-pink-900 mb-6">
                   Our Vision
                 </h2>
                 <p className="text-lg text-gray-700 leading-relaxed">
@@ -131,10 +131,10 @@ export default function About() {
               ].map((value, i) => (
                 <div
                   key={i}
-                  className="card p-6 space-y-3 border-l-4 border-orange-500 hover:shadow-lg transition"
+                  className="card p-6 space-y-3 border-l-4 border-pink-500 hover:shadow-lg transition"
                 >
                   <div className="text-4xl">{value.icon}</div>
-                  <h3 className="text-xl font-bold text-orange-700">
+                  <h3 className="text-xl font-bold text-pink-700">
                     {value.title}
                   </h3>
                   <p className="text-gray-700">{value.desc}</p>
@@ -180,7 +180,7 @@ export default function About() {
                   desc: "We ensure food security and nutritional support for vulnerable populations, particularly children and the elderly.",
                   link: "/causes/food",
                   image: "/assests/2.jpg",
-                  color: "border-red-500",
+                  color: "border-pink-500",
                 },
               ].map((area, i) => (
                 <div
@@ -202,7 +202,7 @@ export default function About() {
                     <p className="text-gray-700 leading-relaxed">{area.desc}</p>
                     <Link
                       href={area.link}
-                      className="text-orange-600 font-semibold hover:text-orange-700 transition inline-block"
+                      className="text-pink-600 font-semibold hover:text-pink-700 transition inline-block"
                     >
                       Learn More →
                     </Link>
@@ -213,7 +213,7 @@ export default function About() {
           </div>
 
           {/* Impact Stats with Images */}
-          <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-2xl p-8 md:p-12">
+          <div className="bg-gradient-to-r from-pink-600/85 to-pink-700/85 text-white rounded-2xl p-8 md:p-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
               Our Impact
             </h2>
@@ -227,41 +227,41 @@ export default function About() {
                 <div key={i} className="text-center">
                   <div className="text-5xl mb-3">{item.icon}</div>
                   <div className="text-4xl font-bold mb-2">{item.stat}</div>
-                  <p className="text-orange-100">{item.label}</p>
+                  <p className="text-pink-100">{item.label}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Contact Info */}
-          <div className="bg-gray-50 rounded-2xl p-8 md:p-12 border border-orange-200">
+          <div className="bg-gray-50 rounded-2xl p-8 md:p-12 border border-pink-200">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
               Get In Touch
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="font-semibold text-lg mb-2 text-orange-700">
+                <h3 className="font-semibold text-lg mb-2 text-pink-700">
                   📍 Address
                 </h3>
                 <p className="text-gray-700">
-                  G76, Noida Sector 63
+                  Subedargunj, Prayagraj
                   <br />
                   Uttar Pradesh, India
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2 text-orange-700">
+                <h3 className="font-semibold text-lg mb-2 text-pink-700">
                   📧 Contact
                 </h3>
                 <a
-                  href="mailto:info@saveranationaltrust.org"
-                  className="text-orange-600 hover:text-orange-700 transition font-semibold"
+                  href="mailto:info@getWishFoundation.in"
+                  className="text-pink-600 hover:text-pink-700 transition font-semibold"
                 >
-                  info@saveranationaltrust.org
+                  info@getWishFoundation.in
                 </a>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2 text-orange-700">
+                <h3 className="font-semibold text-lg mb-2 text-pink-700">
                   🕐 Hours
                 </h3>
                 <p className="text-gray-700">
@@ -271,12 +271,12 @@ export default function About() {
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2 text-orange-700">
+                <h3 className="font-semibold text-lg mb-2 text-pink-700">
                   ❤️ Support Us
                 </h3>
                 <Link
                   href="/donate"
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-bold transition inline-block"
+                  className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg font-bold transition inline-block"
                 >
                   Make a Donation
                 </Link>
@@ -295,24 +295,24 @@ export default function About() {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-600/80 to-red-600/80"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-600/80 to-pink-600/80"></div>
         <div className="relative max-w-4xl mx-auto text-center space-y-6">
           <h2 className="text-3xl md:text-4xl font-bold">
             Ready to Support Our Mission?
           </h2>
-          <p className="text-lg text-orange-100">
+          <p className="text-lg text-pink-100">
             Join us in making a real difference in communities across India
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/donate"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-bold transition inline-block"
+              className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-lg font-bold transition inline-block"
             >
               Donate Now
             </Link>
             <Link
               href="/internship"
-              className="inline-block bg-white text-orange-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-50 transition"
+              className="inline-block bg-white text-pink-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-50 transition"
             >
               Join Our Team
             </Link>

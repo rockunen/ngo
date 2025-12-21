@@ -170,8 +170,8 @@ export default function DonationsManagementPage() {
       {/* Main Content */}
       <section className="max-w-7xl mx-auto px-4 py-12">
         {error && (
-          <div className="mb-6 bg-red-50 border-l-4 border-red-600 p-4 rounded">
-            <p className="text-red-700">{error}</p>
+          <div className="mb-6 bg-pink-50 border-l-4 border-pink-600 p-4 rounded">
+            <p className="text-pink-700">{error}</p>
           </div>
         )}
 
@@ -212,11 +212,11 @@ export default function DonationsManagementPage() {
               <p className="text-gray-500 text-xs mt-1">Awaiting payment</p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-500">
               <p className="text-gray-600 text-sm font-semibold">
                 Failed Donations
               </p>
-              <p className="text-3xl font-bold text-red-600 mt-2">
+              <p className="text-3xl font-bold text-pink-600 mt-2">
                 {stats.failed.count}
               </p>
               <p className="text-gray-500 text-xs mt-1">Payment declined</p>
@@ -322,7 +322,7 @@ export default function DonationsManagementPage() {
                                 ? "bg-green-100 text-green-800"
                                 : donation.status === "pending"
                                 ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
+                                : "bg-pink-100 text-pink-900"
                             }`}
                           >
                             {donation.status.charAt(0).toUpperCase() +

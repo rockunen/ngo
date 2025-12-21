@@ -42,14 +42,14 @@ export default function InternLoginPage() {
 
       {/* Hero Section */}
       <section
-        className="bg-gradient-to-r from-orange-500 to-red-600 text-white py-8 relative"
+        className="bg-gradient-to-r from-pink-600/85 to-pink-700/85 text-white py-8 relative"
         style={{
           backgroundImage: "url(/assests/1.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/85 to-red-600/85"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-500/85 to-pink-600/85"></div>
         <div className="relative max-w-6xl mx-auto px-4 text-center">
           <div className="bg-black/50 p-6 md:p-8 rounded-lg backdrop-blur-sm w-fit mx-auto">
             <h1 className="text-4xl font-bold mb-2">Intern Login</h1>
@@ -70,14 +70,14 @@ export default function InternLoginPage() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <div className="bg-red-50 border-2 border-red-500 text-red-700 p-4 rounded-lg">
+                  <div className="bg-pink-50 border-2 border-pink-500 text-pink-700 p-4 rounded-lg">
                     {error}
                   </div>
                 )}
 
                 <div className="flex flex-col">
                   <label className="font-semibold text-gray-700 mb-2">
-                    Email <span className="text-red-500">*</span>
+                    Email <span className="text-pink-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -86,13 +86,13 @@ export default function InternLoginPage() {
                     onChange={handleInputChange}
                     placeholder="Enter your email"
                     required
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
                   />
                 </div>
 
                 <div className="flex flex-col">
                   <label className="font-semibold text-gray-700 mb-2">
-                    Password <span className="text-red-500">*</span>
+                    Password <span className="text-pink-500">*</span>
                   </label>
                   <input
                     type="password"
@@ -101,13 +101,13 @@ export default function InternLoginPage() {
                     onChange={handleInputChange}
                     placeholder="Enter your password"
                     required
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
+                  className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
                 >
                   Login
                 </button>
@@ -116,7 +116,7 @@ export default function InternLoginPage() {
                   <p>
                     <Link
                       href="#"
-                      className="text-orange-500 font-semibold hover:underline"
+                      className="text-pink-500 font-semibold hover:underline"
                     >
                       Forgot Password?
                     </Link>
@@ -125,7 +125,7 @@ export default function InternLoginPage() {
                     Don't have an account?{" "}
                     <Link
                       href="/intern-signup"
-                      className="text-orange-500 font-semibold hover:underline"
+                      className="text-pink-500 font-semibold hover:underline"
                     >
                       Sign Up Here
                     </Link>
