@@ -177,7 +177,7 @@ export async function POST(request: NextRequest) {
       donation_id: donation.id,
       payment_id: payment.id,
     });
-  } catch (error) {
+  } catch {
     console.error("Donation creation error - System error occurred");
     return NextResponse.json(
       { error: "Failed to process donation request" },

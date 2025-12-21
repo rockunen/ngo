@@ -13,13 +13,9 @@ declare global {
 
 interface DonationFormProps {
   projectId?: string;
-  onSuccess?: (donationId: string) => void;
 }
 
-export default function DonationForm({
-  projectId,
-  onSuccess,
-}: DonationFormProps) {
+export default function DonationForm({ projectId }: DonationFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);

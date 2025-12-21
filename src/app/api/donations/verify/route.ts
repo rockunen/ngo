@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update payment record only after donation is successfully updated
-    const { data: payment, error: paymentError } = await supabase
+    const { error: paymentError } = await supabase
       .from("payments")
       .update({
         razorpay_payment_id: payment_id,
@@ -110,13 +110,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Get donor details for receipt
-    const { data: donor, error: donorError } = await supabase
+    const { data: donor } = await supabase
       .from("donors")
       .select("full_name, email")
       .eq("id", donation.donor_id)
       .single();
 
-    if (donorError) {
+    if (!donor) {
       console.error("Donor fetch error - Database operation failed");
     }
 
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
           .from("donations")
           .update({ receipt_sent: true })
           .eq("id", donation.id);
-      } catch (emailError) {
+      } catch {
         console.error("Email sending failed - Will retry later");
         // Don't fail the payment if email fails
       }
@@ -156,9 +156,9 @@ export async function POST(request: NextRequest) {
       success: true,
       message: "Payment verified successfully",
       donation_id: donation.id,
-      payment_id: payment.id,
+      payment_id: payment_id,
     });
-  } catch (error) {
+  } catch {
     console.error("Payment verification error - System error occurred");
     return NextResponse.json(
       { error: "Failed to verify payment" },
