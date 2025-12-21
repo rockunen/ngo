@@ -124,18 +124,18 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="border-t border-gray-700 pt-6 text-center text-sm">
           <p>
-            &copy; 2024{" "}
+            &copy; 2025{" "}
             <Link href="/" className="hover:text-orange-500 transition">
               Get Wish Foundation
             </Link>{" "}
             Creation By{" "}
             <a
-              href="https://www.balajiwebworld.com/"
+              href="mailto:aamanprime@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-orange-500 transition"
             >
-              Balaji
+              Aaman
             </a>
           </p>
         </div>

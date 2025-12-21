@@ -132,14 +132,12 @@ export default function DonationForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8"></h2>
-
       {error && (
         <div className="mb-8 p-5 bg-red-50 border-l-4 border-red-500 text-red-800 rounded-lg">
           <p className="font-semibold mb-1">Error</p>
           <p className="text-sm">{error}</p>
         </div>
       )}
-
       {/* Amount Selection */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-gray-900 mb-4">
@@ -175,7 +173,6 @@ export default function DonationForm({
           </p>
         )}
       </div>
-
       {/* Personal Information */}
       <div className="mb-8">
         <h3 className="text-lg font-bold text-gray-900 mb-4">
@@ -246,7 +243,6 @@ export default function DonationForm({
           </div>
         </div>
       </div>
-
       {/* Address Information */}
       <details className="mb-8 p-5 bg-gray-50 rounded-lg border-2 border-gray-200 group">
         <summary className="cursor-pointer font-semibold text-gray-900 flex items-center gap-2 hover:text-green-700 transition">
@@ -282,24 +278,6 @@ export default function DonationForm({
         </div>
       </details>
 
-      {/* Message */}
-      <div className="mb-8">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          💭 Message (Optional)
-        </label>
-        <textarea
-          {...register("message")}
-          rows={4}
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition resize-none"
-          placeholder="Share why you're supporting our mission..."
-        />
-        {errors.message && (
-          <p className="text-red-600 text-sm mt-2 font-medium">
-            {errors.message.message}
-          </p>
-        )}
-      </div>
-
       {/* Submit Button */}
       <button
         type="submit"
@@ -315,7 +293,6 @@ export default function DonationForm({
           `Donate ₹${selectedAmount || customAmount || 0}`
         )}
       </button>
-
       <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
         <p className="text-sm text-blue-900">
           <strong>🛡️ Your donation is secure:</strong> We use industry-standard
