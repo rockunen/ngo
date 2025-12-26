@@ -80,3 +80,27 @@ export function verifyRazorpaySignature(
     return false;
   }
 }
+
+// Verify Razorpay Webhook using X-Razorpay-Signature header
+export function verifyRazorpayWebhookSignature(
+  rawBody: string,
+  headerSignature: string | null
+): boolean {
+  try {
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET || "";
+    if (!secret || !headerSignature) return false;
+
+    const expected = crypto
+      .createHmac("sha256", secret)
+      .update(rawBody)
+      .digest("hex");
+
+    return crypto.timingSafeEqual(
+      Buffer.from(expected),
+      Buffer.from(headerSignature)
+    );
+  } catch (error) {
+    console.error("Webhook signature verification error:", error);
+    return false;
+  }
+}

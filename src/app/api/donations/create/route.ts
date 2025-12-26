@@ -36,6 +36,8 @@ export async function POST(request: NextRequest) {
     }
 
     const data = validationResult.data;
+    const internId = body.internId || null; // Optional: if donation is from an intern
+    const referralCode = data.referralCode || null; // Referral code (from intern or manual entry)
 
     // Validate amount range
     const amountInPaise = Math.round(data.amount * 100);
@@ -95,7 +97,7 @@ export async function POST(request: NextRequest) {
       donorId = donor.data.id;
     }
 
-    // Create donation record with idempotency key
+    // Create idempotency key
     const idempotencyKey = `${donorId}-${
       data.email
     }-${amountInPaise}-${Math.floor(Date.now() / 60000)}`;
@@ -105,15 +107,22 @@ export async function POST(request: NextRequest) {
       amount: data.amount,
       currency: "INR",
       message: data.message || null,
+      referral_code: referralCode,
       status: "pending",
       receipt_sent: false,
     };
 
-    // Add idempotency key if needed (will be ignored if column doesn't exist)
+    // Add intern_id if this is an intern donation
+    if (internId) {
+      donationPayload.intern_id = internId;
+    }
+
+    // Add idempotency key if needed
     if (process.env.NODE_ENV === "production") {
       donationPayload.idempotency_key = idempotencyKey;
     }
 
+    // Create donation record
     const { data: donation, error: donationError } = await supabase
       .from("donations")
       .insert([donationPayload])
@@ -144,29 +153,16 @@ export async function POST(request: NextRequest) {
         donor_id: donorId,
         donation_id: donation.id,
         donor_name: data.fullName,
+        intern_id: internId || "",
+        referral_code: referralCode || "",
       },
     });
 
-    // Create payment record linked to donation
-    const { data: payment, error: paymentError } = await supabase
-      .from("payments")
-      .insert([
-        {
-          donation_id: donation.id,
-          razorpay_order_id: razorpayOrder.id,
-          status: "pending",
-        },
-      ])
-      .select()
-      .single();
-
-    if (paymentError) {
-      console.error("Create payment error - Database operation failed");
-      return NextResponse.json(
-        { error: "Failed to process donation" },
-        { status: 500 }
-      );
-    }
+    // Update donation with Razorpay order ID (will be fully updated after payment)
+    await supabase
+      .from("donations")
+      .update({ razorpay_order_id: razorpayOrder.id })
+      .eq("id", donation.id);
 
     return NextResponse.json({
       success: true,
@@ -175,7 +171,8 @@ export async function POST(request: NextRequest) {
       key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       donor_name: data.fullName,
       donation_id: donation.id,
-      payment_id: payment.id,
+      intern_id: internId,
+      referral_code: referralCode,
     });
   } catch {
     console.error("Donation creation error - System error occurred");

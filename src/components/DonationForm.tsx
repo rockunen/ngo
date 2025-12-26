@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { donationFormSchema, DonationFormData } from "@/lib/types";
+import { useSearchParams } from "next/navigation";
 
 declare global {
   interface Window {
@@ -19,6 +20,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const searchParams = useSearchParams();
 
   const {
     register,
@@ -33,6 +35,14 @@ export default function DonationForm({ projectId }: DonationFormProps) {
   const customAmount = watch("amount");
 
   const presetAmounts = [1000, 2000, 5000, 10000, 25000];
+
+  // Prefill referral code from URL query parameter
+  useEffect(() => {
+    const referralCode = searchParams.get("referral");
+    if (referralCode) {
+      setValue("referralCode", referralCode);
+    }
+  }, [searchParams, setValue]);
 
   const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount);
@@ -273,6 +283,27 @@ export default function DonationForm({ projectId }: DonationFormProps) {
           />
         </div>
       </details>
+
+      {/* Referral Code */}
+      <div className="mb-8">
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          🔗 Referral Code (Optional)
+        </label>
+        <input
+          type="text"
+          {...register("referralCode")}
+          placeholder="Enter referral code if you have one"
+          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
+        />
+        {errors.referralCode && (
+          <p className="text-pink-600 text-sm mt-2 font-medium">
+            {errors.referralCode.message}
+          </p>
+        )}
+        <p className="text-gray-600 text-xs mt-1">
+          If you were referred by someone, enter their referral code here.
+        </p>
+      </div>
 
       {/* Submit Button */}
       <button

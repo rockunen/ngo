@@ -15,9 +15,48 @@ export const donationFormSchema = z.object({
   city: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
+  referralCode: z
+    .string()
+    .max(50, "Referral code must be less than 50 characters")
+    .optional(),
 });
 
 export type DonationFormData = z.infer<typeof donationFormSchema>;
+
+// Intern signup schema
+export const internSignupSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    phone: z
+      .string()
+      .min(10, "Phone number must be at least 10 digits")
+      .regex(
+        /^[0-9\s\-\+\(\)]*$/,
+        "Phone number can only contain digits, spaces, dashes, and parentheses"
+      )
+      .refine((phone) => {
+        // Extract only digits to check length
+        const digitsOnly = phone.replace(/\D/g, "");
+        return digitsOnly.length >= 10;
+      }, "Phone number must contain at least 10 digits"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+export type InternSignupData = z.infer<typeof internSignupSchema>;
+
+// Intern login schema
+export const internLoginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export type InternLoginData = z.infer<typeof internLoginSchema>;
 
 // Database types for Supabase
 export interface Donor {
@@ -69,4 +108,25 @@ export interface Project {
   status: "active" | "completed" | "paused";
   created_at: string;
   updated_at: string;
+}
+
+// Database types for Interns
+export interface Intern {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  password_hash: string;
+  referral_code: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface InternDonation {
+  id: string;
+  intern_id: string;
+  donation_id: string;
+  amount: number;
+  status: "pending" | "completed" | "failed";
+  created_at: string;
 }

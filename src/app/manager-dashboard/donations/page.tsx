@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 interface Donation {
   id: string;
@@ -44,35 +44,7 @@ export default function DonationsManagementPage() {
     summary: any;
   } | null>(null);
 
-  useEffect(() => {
-    const verifySession = async () => {
-      try {
-        const response = await fetch("/api/auth/verify-session");
-
-        if (!response.ok) {
-          router.push("/manager-login");
-          return;
-        }
-
-        const data = await response.json();
-        if (!data.manager) {
-          router.push("/manager-login");
-          return;
-        }
-
-        // Session is valid, fetch donations and stats
-        fetchDonations();
-        fetchStats();
-      } catch (err) {
-        console.error("Session verification error:", err);
-        router.push("/manager-login");
-      }
-    };
-
-    verifySession();
-  }, [router]);
-
-  const fetchDonations = async () => {
+  const fetchDonations = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
@@ -106,9 +78,9 @@ export default function DonationsManagementPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, itemsPerPage, router]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await fetch("/api/donations/stats");
       if (response.ok) {
@@ -118,7 +90,35 @@ export default function DonationsManagementPage() {
     } catch (err) {
       console.error("Failed to fetch stats:", err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const verifySession = async () => {
+      try {
+        const response = await fetch("/api/auth/verify-session");
+
+        if (!response.ok) {
+          router.push("/manager-login");
+          return;
+        }
+
+        const data = await response.json();
+        if (!data.manager) {
+          router.push("/manager-login");
+          return;
+        }
+
+        // Session is valid, fetch donations and stats
+        fetchDonations();
+        fetchStats();
+      } catch (err) {
+        console.error("Session verification error:", err);
+        router.push("/manager-login");
+      }
+    };
+
+    verifySession();
+  }, [router, fetchDonations, fetchStats]);
 
   useEffect(() => {
     const filtered = donations.filter((donation) => {

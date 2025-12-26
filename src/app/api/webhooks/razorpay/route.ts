@@ -1,140 +1,98 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
-import { verifyRazorpaySignature } from "@/lib/razorpay";
+import { verifyRazorpayWebhookSignature } from "@/lib/razorpay";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    // Verify webhook signature using raw body and header
+    const signature = request.headers.get("x-razorpay-signature");
+    const rawBody = await request.text();
+
+    const valid = verifyRazorpayWebhookSignature(rawBody, signature);
+    if (!valid) {
+      console.error("Invalid Razorpay webhook signature");
+      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    }
+
+    const body = JSON.parse(rawBody);
     const { event, payload } = body;
 
     console.log(`Webhook received: ${event}`);
 
-    // Only process payment authorized events
-    if (event === "payment.authorized") {
-      const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
-        payload.payment;
+    const supabase = supabaseServer();
 
-      // Verify signature for security
-      const isValid = verifyRazorpaySignature(
-        razorpay_order_id,
-        razorpay_payment_id,
-        razorpay_signature
-      );
+    if (event === "payment.captured") {
+      const payment = payload?.payment?.entity;
+      const payment_id: string | undefined = payment?.id;
+      const order_id: string | undefined = payment?.order_id;
 
-      if (!isValid) {
-        console.error(`Invalid signature for payment: ${razorpay_payment_id}`);
-        return NextResponse.json(
-          { error: "Invalid signature" },
-          { status: 400 }
-        );
+      if (!payment_id || !order_id) {
+        console.error("Webhook missing payment/order ids");
+        return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
       }
 
-      const supabase = supabaseServer();
-
-      // Find donation by order ID
-      const { data: donation, error: fetchError } = await supabase
+      // Find donation by Razorpay order ID
+      const { data: donation } = await supabase
         .from("donations")
         .select("id, status")
-        .eq("razorpay_order_id", razorpay_order_id)
+        .eq("razorpay_order_id", order_id)
         .single();
 
-      if (fetchError || !donation) {
-        console.error(`Donation not found for order: ${razorpay_order_id}`);
+      if (!donation) {
+        console.error(`Donation not found for order: ${order_id}`);
         return NextResponse.json(
           { error: "Donation not found" },
           { status: 404 }
         );
       }
 
-      // Update payment record
-      const { error: paymentError } = await supabase
-        .from("payments")
-        .update({
-          razorpay_payment_id,
-          razorpay_signature,
-          status: "completed",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("razorpay_order_id", razorpay_order_id);
-
-      if (paymentError) {
-        console.error("Failed to update payment:", paymentError);
-      }
-
-      // Update donation status
-      const { error: donationError } = await supabase
+      // Idempotent update: only update if not already completed
+      const { error: updateErr } = await supabase
         .from("donations")
         .update({
           status: "completed",
-          razorpay_payment_id,
-          razorpay_signature,
+          razorpay_payment_id: payment_id,
           updated_at: new Date().toISOString(),
         })
-        .eq("id", donation.id);
+        .eq("id", donation.id)
+        .neq("status", "completed");
 
-      if (donationError) {
-        console.error("Failed to update donation:", donationError);
+      if (updateErr) {
+        console.error("Failed to update donation on webhook:", updateErr);
       }
 
-      console.info(
-        `Payment webhook processed: ${razorpay_payment_id} for donation: ${donation.id}`
-      );
-
-      return NextResponse.json({
-        success: true,
-        message: "Webhook processed",
-      });
+      return NextResponse.json({ success: true });
     }
 
-    // Handle payment failed event
     if (event === "payment.failed") {
-      const { razorpay_payment_id, razorpay_order_id, error } = payload.payment;
+      const payment = payload?.payment?.entity;
+      const order_id: string | undefined = payment?.order_id;
 
-      const supabase = supabaseServer();
+      if (!order_id) {
+        console.error("Webhook missing order id for failure event");
+        return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+      }
 
       // Find donation by order ID
       const { data: donation } = await supabase
         .from("donations")
         .select("id")
-        .eq("razorpay_order_id", razorpay_order_id)
+        .eq("razorpay_order_id", order_id)
         .single();
 
       if (donation) {
-        // Update donation status to failed
         await supabase
           .from("donations")
-          .update({
-            status: "failed",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", donation.id);
-
-        // Update payment record with failure reason
-        await supabase
-          .from("payments")
-          .update({
-            status: "failed",
-            failure_reason: error?.description || "Payment failed",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("razorpay_order_id", razorpay_order_id);
-
-        console.info(
-          `Payment failed webhook: ${razorpay_payment_id} - ${error?.description}`
-        );
+          .update({ status: "failed", updated_at: new Date().toISOString() })
+          .eq("id", donation.id)
+          .neq("status", "completed");
       }
 
-      return NextResponse.json({
-        success: true,
-        message: "Webhook processed",
-      });
+      return NextResponse.json({ success: true });
     }
 
-    // Acknowledge other events (required by Razorpay)
-    return NextResponse.json({
-      success: true,
-      message: "Webhook acknowledged",
-    });
+    // Acknowledge other events but do not mutate state (e.g., payment.authorized)
+    return NextResponse.json({ success: true, message: "Event acknowledged" });
   } catch (error) {
     console.error("Webhook processing error:", error);
     return NextResponse.json(

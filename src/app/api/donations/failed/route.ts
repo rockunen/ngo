@@ -54,21 +54,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update payment record with failure reason
-    const { error: paymentError } = await supabase
-      .from("payments")
-      .update({
-        status: "failed",
-        failure_reason: failure_reason || "Payment declined",
-        updated_at: new Date().toISOString(),
-      })
-      .eq("razorpay_order_id", order_id);
-
-    if (paymentError) {
-      console.error("Failed to update payment record:", paymentError);
-      // Don't fail the response - donation is already marked as failed
-    }
-
     console.info(
       `Payment failed for donation ${donation_id}: ${
         failure_reason || "Unknown reason"

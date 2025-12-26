@@ -1,19 +1,7 @@
 -- Enable necessary extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Users table (linked to Supabase Auth)
-CREATE TABLE IF NOT EXISTS public.users (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  email TEXT UNIQUE NOT NULL,
-  full_name TEXT NOT NULL,
-  phone TEXT,
-  avatar_url TEXT,
-  bio TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Donors table (for anonymous donations)
+-- Donors table (for all donations)
 CREATE TABLE IF NOT EXISTS public.donors (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   full_name TEXT NOT NULL,
@@ -29,28 +17,30 @@ CREATE TABLE IF NOT EXISTS public.donors (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Projects table
-CREATE TABLE IF NOT EXISTS public.projects (
+-- Interns table (must be created BEFORE donations table since donations references it)
+CREATE TABLE IF NOT EXISTS public.interns (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  title TEXT NOT NULL,
-  description TEXT,
-  image_url TEXT,
-  target_amount NUMERIC(15,2),
-  current_amount NUMERIC(15,2) DEFAULT 0,
-  status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'paused')),
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  phone TEXT NOT NULL,
+  password_hash TEXT NOT NULL,
+  referral_code TEXT UNIQUE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Donations table
+-- Donations table (consolidated - all payment info included)
 CREATE TABLE IF NOT EXISTS public.donations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   donor_id UUID NOT NULL REFERENCES public.donors(id) ON DELETE CASCADE,
+  intern_id UUID REFERENCES public.interns(id) ON DELETE SET NULL,
   amount NUMERIC(15,2) NOT NULL,
   currency TEXT DEFAULT 'INR',
   message TEXT,
+  referral_code TEXT,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed')),
   receipt_sent BOOLEAN DEFAULT FALSE,
+  receipt_number TEXT UNIQUE,
   razorpay_order_id TEXT UNIQUE,
   razorpay_payment_id TEXT UNIQUE,
   razorpay_signature TEXT,
@@ -59,49 +49,12 @@ CREATE TABLE IF NOT EXISTS public.donations (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Payments table
-CREATE TABLE IF NOT EXISTS public.payments (
+-- Intern sessions table
+CREATE TABLE IF NOT EXISTS public.intern_sessions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  donation_id UUID NOT NULL REFERENCES public.donations(id) ON DELETE CASCADE,
-  razorpay_order_id TEXT NOT NULL UNIQUE,
-  razorpay_payment_id TEXT UNIQUE,
-  razorpay_signature TEXT,
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed')),
-  failure_reason TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Donation receipts table
-CREATE TABLE IF NOT EXISTS public.donation_receipts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  donation_id UUID NOT NULL REFERENCES public.donations(id) ON DELETE CASCADE,
-  receipt_number TEXT UNIQUE NOT NULL,
-  receipt_url TEXT,
-  sent_at TIMESTAMP WITH TIME ZONE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Internships table
-CREATE TABLE IF NOT EXISTS public.internships (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
-  position TEXT NOT NULL,
-  duration_weeks INTEGER,
-  status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'rejected')),
-  applied_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  completed_at TIMESTAMP WITH TIME ZONE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Impact updates/logs table
-CREATE TABLE IF NOT EXISTS public.impact_updates (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  project_id UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
-  title TEXT NOT NULL,
-  description TEXT NOT NULL,
-  image_url TEXT,
+  intern_id UUID NOT NULL REFERENCES public.interns(id) ON DELETE CASCADE,
+  token TEXT UNIQUE NOT NULL,
+  expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -122,50 +75,21 @@ VALUES ('admin@b.c', 'password', 'Admin User', TRUE)
 ON CONFLICT (email) DO NOTHING;
 
 -- Create indexes for performance
-CREATE INDEX idx_donations_donor_id ON public.donations(donor_id);
-CREATE INDEX idx_donations_status ON public.donations(status);
-CREATE INDEX idx_payments_donation_id ON public.payments(donation_id);
-CREATE INDEX idx_payments_razorpay_order_id ON public.payments(razorpay_order_id);
-CREATE INDEX idx_internships_user_id ON public.internships(user_id);
-CREATE INDEX idx_impact_updates_project_id ON public.impact_updates(project_id);
+CREATE INDEX IF NOT EXISTS idx_donations_donor_id ON public.donations(donor_id);
+CREATE INDEX IF NOT EXISTS idx_donations_intern_id ON public.donations(intern_id);
+CREATE INDEX IF NOT EXISTS idx_donations_status ON public.donations(status);
+CREATE INDEX IF NOT EXISTS idx_donations_referral_code ON public.donations(referral_code);
+CREATE INDEX IF NOT EXISTS idx_interns_email ON public.interns(email);
+CREATE INDEX IF NOT EXISTS idx_interns_referral_code ON public.interns(referral_code);
+CREATE INDEX IF NOT EXISTS idx_intern_sessions_token ON public.intern_sessions(token);
 
--- Create RLS (Row Level Security) policies
-
--- Users table policies
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users can view their own profile" 
-  ON public.users FOR SELECT 
-  USING (auth.uid() = id);
-
-CREATE POLICY "Users can update their own profile" 
-  ON public.users FOR UPDATE 
-  USING (auth.uid() = id);
-
--- Donations table policies
+-- Enable RLS (Row Level Security)
 ALTER TABLE public.donations ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policies (without IF NOT EXISTS - PostgreSQL doesn't support it for policies)
+-- Drop existing policy if it exists, then create new one
+DROP POLICY IF EXISTS "Donations are viewable by anyone (for public stats)" ON public.donations;
 
 CREATE POLICY "Donations are viewable by anyone (for public stats)"
   ON public.donations FOR SELECT
-  USING (true);
-
--- Payments table policies (sensitive data)
-ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Only service role can view payments"
-  ON public.payments FOR SELECT
-  USING (FALSE);
-
--- Projects table policies
-ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Projects are viewable by everyone"
-  ON public.projects FOR SELECT
-  USING (true);
-
--- Impact updates policies
-ALTER TABLE public.impact_updates ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Impact updates are viewable by everyone"
-  ON public.impact_updates FOR SELECT
   USING (true);
