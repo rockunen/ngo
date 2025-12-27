@@ -21,7 +21,7 @@ export default function Footer() {
             <div className="flex gap-3">
               <span>✉️</span>
               <div>
-                <p>info@getWishFoundation.in</p>
+                <p>info@getwishfoundation.in</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -126,12 +126,12 @@ export default function Footer() {
             </Link>{" "}
             Creation By{" "}
             <a
-              href="mailto:aamanprime@gmail.com"
+              href="mailto:cy381144@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-pink-500 transition"
             >
-              Aaman
+              Chandan
             </a>
           </p>
         </div>

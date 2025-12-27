@@ -100,10 +100,10 @@ export default function Privacy() {
                 information. You can also opt-out of our mailing list at any
                 time. To exercise these rights, please contact us at{" "}
                 <a
-                  href="mailto:info@getWishFoundation.in"
+                  href="mailto:info@getwishfoundation.in"
                   className="text-pink-600 font-bold hover:text-pink-700"
                 >
-                  info@getWishFoundation.in
+                  info@getwishfoundation.in
                 </a>
                 .
               </p>

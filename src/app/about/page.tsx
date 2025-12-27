@@ -254,10 +254,10 @@ export default function About() {
                   📧 Contact
                 </h3>
                 <a
-                  href="mailto:info@getWishFoundation.in"
+                  href="mailto:info@getwishfoundation.in"
                   className="text-pink-600 hover:text-pink-700 transition font-semibold"
                 >
-                  info@getWishFoundation.in
+                  info@getwishfoundation.in
                 </a>
               </div>
               <div>

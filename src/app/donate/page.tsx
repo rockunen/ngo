@@ -242,7 +242,7 @@ export default function DonatePage() {
             </summary>
             <p className="text-gray-700 mt-4 leading-relaxed">
               Yes, you can cancel monthly donations anytime without penalty.
-              Simply contact us at info@getWishFoundation.in with your donation
+              Simply contact us at info@getwishfoundation.in with your donation
               ID, and we'll process the cancellation within 2 business days.
             </p>
           </details>
@@ -273,7 +273,7 @@ export default function DonatePage() {
             <p className="text-gray-700 mt-4 leading-relaxed">
               Currently, we accept donations in INR. For international donors or
               alternative payment methods, please contact us at
-              info@getWishFoundation.in. We're happy to explore options for your
+              info@getwishfoundation.in. We're happy to explore options for your
               donation.
             </p>
           </details>

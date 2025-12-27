@@ -16,30 +16,14 @@ interface Intern {
 interface InternDonation {
   id: string;
   amount: number;
-  currency: string;
   status: "pending" | "completed" | "failed";
   created_at: string;
-  message?: string;
-  cause?: string;
-  receipt_number?: string;
-  razorpay_payment_id?: string;
-  razorpay_order_id?: string;
-  donors?: {
-    full_name: string;
-    email: string;
-    phone?: string;
-    city?: string;
-    state?: string;
-  };
 }
 
 export default function InternDashboard() {
   const [intern, setIntern] = useState<Intern | null>(null);
   const [donations, setDonations] = useState<InternDonation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [donationLink, setDonationLink] = useState<string>("");
-  const [selectedDonation, setSelectedDonation] =
-    useState<InternDonation | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -54,13 +38,6 @@ export default function InternDashboard() {
 
         const data = await response.json();
         setIntern(data.intern);
-
-        // Generate full donation link
-        const baseUrl =
-          typeof window !== "undefined" ? window.location.origin : "";
-        setDonationLink(
-          `${baseUrl}/donate?referral=${data.intern.referral_code}`
-        );
 
         // Fetch donations
         const donationsResponse = await fetch("/api/intern/donations");
@@ -182,17 +159,11 @@ export default function InternDashboard() {
             <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
               <p className="text-sm text-blue-900">
                 <strong>💡 Donation Link:</strong> Share this link with your
-                referral code: {donationLink}
+                referral code:{" "}
+                {typeof window !== "undefined"
+                  ? `${window.location.origin}/donate?referral=${intern.referral_code}`
+                  : ""}
               </p>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(donationLink);
-                  alert("Donation link copied to clipboard!");
-                }}
-                className="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition"
-              >
-                📋 Copy Link
-              </button>
             </div>
           </div>
         </section>
@@ -234,7 +205,7 @@ export default function InternDashboard() {
         <section>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">
-              📋 Your Refered Donations
+              📋 Your Donations
             </h2>
             <Link
               href="/donate"
@@ -266,19 +237,10 @@ export default function InternDashboard() {
                         Amount
                       </th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                        Cause
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                         Status
                       </th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                        Receipt
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                         Date
-                      </th>
-                      <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
-                        Action
                       </th>
                     </tr>
                   </thead>
@@ -289,11 +251,7 @@ export default function InternDashboard() {
                         className="border-b hover:bg-gray-50 transition"
                       >
                         <td className="px-6 py-4 text-sm font-semibold text-pink-600">
-                          {donation.currency}{" "}
-                          {donation.amount.toLocaleString("en-IN")}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {donation.cause || "General"}
+                          ₹{donation.amount.toLocaleString("en-IN")}
                         </td>
                         <td className="px-6 py-4 text-sm">
                           <span
@@ -310,20 +268,7 @@ export default function InternDashboard() {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
-                          <code className="bg-gray-100 px-2 py-1 rounded text-xs">
-                            {donation.receipt_number || "—"}
-                          </code>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
                           {new Date(donation.created_at).toLocaleDateString()}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <button
-                            onClick={() => setSelectedDonation(donation)}
-                            className="text-blue-600 hover:text-blue-800 font-semibold text-sm"
-                          >
-                            View Details →
-                          </button>
                         </td>
                       </tr>
                     ))}
@@ -334,188 +279,6 @@ export default function InternDashboard() {
           )}
         </section>
       </div>
-
-      {/* Donation Details Modal */}
-      {selectedDonation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-pink-500 to-pink-700 text-white px-6 py-4 flex justify-between items-center">
-              <h3 className="text-xl font-bold">Donation Details</h3>
-              <button
-                onClick={() => setSelectedDonation(null)}
-                className="text-2xl hover:text-pink-200 transition"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-8 space-y-6">
-              {/* Donor Information */}
-              {selectedDonation.donors && (
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500 p-4 rounded">
-                  <h4 className="text-lg font-bold text-gray-900 mb-3">
-                    👤 Donor Information
-                  </h4>
-                  <div className="space-y-2">
-                    <div>
-                      <p className="text-gray-600 text-sm">Name</p>
-                      <p className="text-gray-900 font-semibold">
-                        {selectedDonation.donors.full_name}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600 text-sm">Email</p>
-                      <p className="text-gray-900 font-semibold break-all">
-                        {selectedDonation.donors.email}
-                      </p>
-                    </div>
-                    {selectedDonation.donors.phone && (
-                      <div>
-                        <p className="text-gray-600 text-sm">Phone</p>
-                        <p className="text-gray-900 font-semibold">
-                          {selectedDonation.donors.phone}
-                        </p>
-                      </div>
-                    )}
-                    {(selectedDonation.donors.city ||
-                      selectedDonation.donors.state) && (
-                      <div>
-                        <p className="text-gray-600 text-sm">Location</p>
-                        <p className="text-gray-900 font-semibold">
-                          {selectedDonation.donors.city}
-                          {selectedDonation.donors.city &&
-                          selectedDonation.donors.state
-                            ? ", "
-                            : ""}
-                          {selectedDonation.donors.state}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Basic Info */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-gray-600 text-sm mb-1">Donation ID</p>
-                  <code className="text-sm bg-gray-100 p-2 rounded block break-all">
-                    {selectedDonation.id}
-                  </code>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm mb-1">Amount</p>
-                  <p className="text-2xl font-bold text-pink-600">
-                    {selectedDonation.currency}{" "}
-                    {selectedDonation.amount.toLocaleString("en-IN")}
-                  </p>
-                </div>
-              </div>
-
-              {/* Cause and Message */}
-              <div className="border-t pt-4">
-                <div className="mb-4">
-                  <p className="text-gray-600 text-sm mb-1">Cause/Project</p>
-                  <p className="text-gray-900 font-semibold">
-                    {selectedDonation.cause || "General Donation"}
-                  </p>
-                </div>
-                {selectedDonation.message && (
-                  <div>
-                    <p className="text-gray-600 text-sm mb-1">
-                      Donor's Message
-                    </p>
-                    <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-                      <p className="text-gray-900 italic">
-                        "{selectedDonation.message}"
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Status and Dates */}
-              <div className="border-t pt-4 grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-gray-600 text-sm mb-1">Status</p>
-                  <span
-                    className={`px-4 py-2 rounded-full text-sm font-semibold inline-block ${
-                      selectedDonation.status === "completed"
-                        ? "bg-green-100 text-green-800"
-                        : selectedDonation.status === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {selectedDonation.status.charAt(0).toUpperCase() +
-                      selectedDonation.status.slice(1)}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm mb-1">Date</p>
-                  <p className="text-gray-900 font-semibold">
-                    {new Date(selectedDonation.created_at).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-
-              {/* Receipt and Payment Info */}
-              {selectedDonation.receipt_number && (
-                <div className="border-t pt-4">
-                  <p className="text-gray-600 text-sm mb-2">Receipt Number</p>
-                  <code className="bg-gray-100 p-3 rounded block break-all font-mono text-sm">
-                    {selectedDonation.receipt_number}
-                  </code>
-                </div>
-              )}
-
-              {selectedDonation.razorpay_payment_id && (
-                <div className="border-t pt-4">
-                  <div className="mb-4">
-                    <p className="text-gray-600 text-sm mb-1">
-                      Razorpay Payment ID
-                    </p>
-                    <code className="bg-gray-100 p-2 rounded block break-all text-xs">
-                      {selectedDonation.razorpay_payment_id}
-                    </code>
-                  </div>
-                  {selectedDonation.razorpay_order_id && (
-                    <div>
-                      <p className="text-gray-600 text-sm mb-1">
-                        Razorpay Order ID
-                      </p>
-                      <code className="bg-gray-100 p-2 rounded block break-all text-xs">
-                        {selectedDonation.razorpay_order_id}
-                      </code>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="border-t pt-4 flex gap-3">
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(selectedDonation.id);
-                    alert("Donation ID copied!");
-                  }}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition"
-                >
-                  📋 Copy ID
-                </button>
-                <button
-                  onClick={() => setSelectedDonation(null)}
-                  className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }

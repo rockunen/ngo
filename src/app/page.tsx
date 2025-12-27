@@ -129,7 +129,7 @@ export default function HomePage() {
     {
       question: "How Can I Volunteer?",
       answer:
-        "Join our social internship program or contact us at info@getWishFoundation.in to discuss volunteer opportunities.",
+        "Join our social internship program or contact us at info@getwishfoundation.in to discuss volunteer opportunities.",
     },
   ];
 

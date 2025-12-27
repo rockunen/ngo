@@ -86,10 +86,10 @@ export default function Contact() {
                   <span className="text-3xl">📧</span> Email
                 </h3>
                 <a
-                  href="mailto:info@getWishFoundation.in"
+                  href="mailto:info@getwishfoundation.in"
                   className="text-pink-600 hover:text-pink-700 font-semibold ml-12"
                 >
-                  info@getWishFoundation.in
+                  info@getwishfoundation.in
                 </a>
               </div>
 
