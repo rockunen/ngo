@@ -1,48 +1,71 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { internSignupSchema, InternSignupData } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 export default function InternshipPage() {
-  const [formData, setFormData] = useState({
-    fname: "",
-    designation: "",
-    email: "",
-    password: "",
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [donationLink, setDonationLink] = useState<string | null>(null);
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InternSignupData>({
+    resolver: zodResolver(internSignupSchema),
   });
-  const [submitted, setSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
+  const onSubmit = async (data: InternSignupData) => {
+    setIsLoading(true);
+    setError(null);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-pink-500"></div>
-      </div>
-    );
-  }
+    try {
+      const response = await fetch("/api/auth/intern-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          password: data.password,
+        }),
+      });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+      const result = await response.json();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setFormData({ fname: "", designation: "", email: "", password: "" });
-      setSubmitted(false);
-    }, 3000);
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to sign up");
+      }
+
+      // Store session token in cookie
+      document.cookie = `intern_session=${
+        result.session_token
+      }; path=/; max-age=${30 * 24 * 60 * 60}`;
+
+      // Show success with referral code
+      setReferralCode(result.referral_code);
+      const baseUrl =
+        typeof window !== "undefined" ? window.location.origin : "";
+      setDonationLink(`${baseUrl}/donate?referral=${result.referral_code}`);
+      setSignupSuccess(true);
+
+      // Auto redirect after 5 seconds
+      setTimeout(() => {
+        router.push("/intern-dashboard");
+      }, 5000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const benefits = [
@@ -92,6 +115,74 @@ export default function InternshipPage() {
     "Passion for social work and community development",
     "Basic computer literacy",
   ];
+
+  // Success screen
+  if (signupSuccess && referralCode && donationLink) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 md:px-6">
+        <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8">
+          <div className="text-center mb-8">
+            <div className="text-6xl mb-4">🎉</div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Account Created!
+            </h1>
+            <p className="text-gray-600">Welcome to Get Wish Foundation</p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-pink-50 border-2 border-pink-500 rounded-lg p-6">
+              <p className="text-sm text-gray-600 mb-2">Your Referral Code:</p>
+              <div className="flex items-center gap-2">
+                <code className="text-2xl font-bold text-pink-600 flex-1 break-all">
+                  {referralCode}
+                </code>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(referralCode);
+                    alert("Referral code copied!");
+                  }}
+                  className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded font-semibold text-sm transition whitespace-nowrap"
+                >
+                  📋 Copy
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+              <p className="text-sm text-blue-900 mb-3">
+                <strong>💡 Donation Link:</strong> Share this link with your
+                friends and family:
+              </p>
+              <div className="bg-white p-3 rounded border border-blue-200 mb-3 break-all text-xs font-mono">
+                {donationLink}
+              </div>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(donationLink);
+                  alert("Donation link copied to clipboard!");
+                }}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold text-sm transition"
+              >
+                📋 Copy Full Link
+              </button>
+            </div>
+
+            <div className="text-center">
+              <p className="text-gray-600 text-sm mb-4">
+                Redirecting to dashboard in 5 seconds...
+              </p>
+              <Link
+                href="/intern-dashboard"
+                className="inline-block bg-gradient-to-r from-pink-500 to-pink-700 text-white px-8 py-3 rounded-lg font-bold hover:from-pink-600 hover:to-pink-800 transition"
+              >
+                Go to Dashboard Now
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -295,100 +386,127 @@ export default function InternshipPage() {
               Complete the form below to register for our internship program
             </p>
 
-            {submitted ? (
-              <div className="bg-green-50 border-2 border-green-500 text-green-700 p-6 rounded-lg text-center">
-                <h3 className="text-2xl font-bold mb-2">
-                  ✓ Registration Successful!
-                </h3>
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-800 rounded">
+                <p className="font-semibold text-sm">{error}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Full Name */}
+                <div className="flex flex-col">
+                  <label className="font-semibold text-gray-700 mb-2">
+                    Full Name <span className="text-pink-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    {...register("name")}
+                    placeholder="Enter your full name"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                  />
+                  {errors.name && (
+                    <p className="text-red-600 text-sm mt-1">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Phone */}
+                <div className="flex flex-col">
+                  <label className="font-semibold text-gray-700 mb-2">
+                    Phone Number <span className="text-pink-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    {...register("phone")}
+                    placeholder="10 digit mobile number"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                  />
+                  {errors.phone && (
+                    <p className="text-red-600 text-sm mt-1">
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Email */}
+                <div className="flex flex-col">
+                  <label className="font-semibold text-gray-700 mb-2">
+                    Email <span className="text-pink-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    {...register("email")}
+                    placeholder="Enter your email"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                  />
+                  {errors.email && (
+                    <p className="text-red-600 text-sm mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Password */}
+                <div className="flex flex-col">
+                  <label className="font-semibold text-gray-700 mb-2">
+                    Password <span className="text-pink-500">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    {...register("password")}
+                    placeholder="Create a password"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                  />
+                  {errors.password && (
+                    <p className="text-red-600 text-sm mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 mb-2">
+                  Confirm Password <span className="text-pink-500">*</span>
+                </label>
+                <input
+                  type="password"
+                  {...register("confirmPassword")}
+                  placeholder="Re-enter your password"
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                />
+                {errors.confirmPassword && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
+              >
+                {isLoading ? "Registering..." : "Register Now"}
+              </button>
+
+              <div className="text-center text-gray-600">
                 <p>
-                  Thank you for registering. We'll review your application and
-                  contact you soon.
+                  Already have an account?{" "}
+                  <Link
+                    href="/intern-login"
+                    className="text-pink-500 font-semibold hover:underline"
+                  >
+                    Login Here
+                  </Link>
                 </p>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="flex flex-col">
-                    <label className="font-semibold text-gray-700 mb-2">
-                      Full Name <span className="text-pink-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="fname"
-                      value={formData.fname}
-                      onChange={handleInputChange}
-                      placeholder="Enter your full name"
-                      required
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="font-semibold text-gray-700 mb-2">
-                      Designation <span className="text-pink-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="designation"
-                      value={formData.designation}
-                      onChange={handleInputChange}
-                      placeholder="e.g., Student, Recent Graduate"
-                      required
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="flex flex-col">
-                    <label className="font-semibold text-gray-700 mb-2">
-                      Email <span className="text-pink-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="Enter your email"
-                      required
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="font-semibold text-gray-700 mb-2">
-                      Password <span className="text-pink-500">*</span>
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      placeholder="Create a password"
-                      required
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
-                >
-                  Register Now
-                </button>
-
-                <div className="text-center text-gray-600">
-                  <p>
-                    Already have an account?{" "}
-                    <Link
-                      href="/intern-login"
-                      className="text-pink-500 font-semibold hover:underline"
-                    >
-                      Login Here
-                    </Link>
-                  </p>
-                </div>
-              </form>
-            )}
+            </form>
           </div>
         </div>
       </section>
@@ -441,7 +559,7 @@ export default function InternshipPage() {
             change
           </p>
           <a
-            href="/intern-signup"
+            href="#registration"
             className="inline-block bg-white text-pink-500 font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition"
           >
             Apply Now

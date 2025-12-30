@@ -154,7 +154,7 @@ export default function HomePage() {
               <div className="relative h-full flex items-center justify-start">
                 <div className="max-w-4xl mx-auto px-4 md:px-8 w-full">
                   <div className="bg-black/60 p-8 md:p-12 rounded-lg backdrop-blur-sm w-fit max-w-2xl">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white text-center">
                       {slide.title.split(" ").map((word, i) =>
                         word === "Help" ||
                         word === "lasting" ||
@@ -175,12 +175,28 @@ export default function HomePage() {
                         )
                       )}
                     </h1>
-                    <Link
-                      href="/donate"
-                      className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded transition font-bold"
-                    >
-                      ❤️ Donate Now
-                    </Link>
+                    <div className="flex flex-col items-center gap-4">
+                      <Link
+                        href="/donate"
+                        className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded transition font-bold relative z-10"
+                      >
+                        ❤️ Donate Now
+                      </Link>
+                      <div className="flex gap-4 flex-wrap justify-center relative z-10">
+                        <Link
+                          href="/intern-signup"
+                          className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded transition font-bold text-sm md:text-base"
+                        >
+                          📝 Intern Signup
+                        </Link>
+                        <Link
+                          href="/intern-login"
+                          className="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded transition font-bold text-sm md:text-base"
+                        >
+                          🔐 Intern Login
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
