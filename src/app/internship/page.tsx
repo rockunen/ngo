@@ -559,7 +559,7 @@ export default function InternshipPage() {
             change
           </p>
           <a
-            href="#registration"
+            href="/intern-signup"
             className="inline-block bg-white text-pink-500 font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition"
           >
             Apply Now
