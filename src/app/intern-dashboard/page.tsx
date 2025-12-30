@@ -145,25 +145,26 @@ export default function InternDashboard() {
                 <code className="text-3xl font-bold text-pink-600 flex-1 break-all">
                   {intern.referral_code}
                 </code>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(intern.referral_code);
-                    alert("Referral code copied to clipboard!");
-                  }}
-                  className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap"
-                >
-                  📋 Copy
-                </button>
               </div>
             </div>
             <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-              <p className="text-sm text-blue-900">
+              <p className="text-sm text-blue-900 mb-4">
                 <strong>💡 Donation Link:</strong> Share this link with your
                 referral code:{" "}
                 {typeof window !== "undefined"
                   ? `${window.location.origin}/donate?referral=${intern.referral_code}`
                   : ""}
               </p>
+              <button
+                onClick={() => {
+                  const referralUrl = `${window.location.origin}/donate?referral=${intern.referral_code}`;
+                  navigator.clipboard.writeText(referralUrl);
+                  alert("Referral URL copied to clipboard!");
+                }}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold transition"
+              >
+                📋 Copy Referral URL
+              </button>
             </div>
           </div>
         </section>

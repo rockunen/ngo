@@ -100,22 +100,7 @@ export default function ManagerDashboard() {
 
       {/* Main Content */}
       <section className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {/* Card: Projects */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Projects</h3>
-              <span className="text-2xl">📊</span>
-            </div>
-            <p className="text-3xl font-bold text-blue-600 mb-4">--</p>
-            <Link
-              href="/manager-dashboard/projects"
-              className="text-blue-600 font-semibold hover:underline"
-            >
-              View Projects →
-            </Link>
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* Card: Donations */}
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <div className="flex items-center justify-between mb-4">
@@ -154,17 +139,6 @@ export default function ManagerDashboard() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
-              href="/manager-dashboard/projects/create"
-              className="block p-4 border-2 border-blue-200 rounded-lg hover:bg-blue-50 transition"
-            >
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Create New Project
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Start a new fundraising project
-              </p>
-            </Link>
-            <Link
               href="/manager-dashboard/donations"
               className="block p-4 border-2 border-green-200 rounded-lg hover:bg-green-50 transition"
             >
@@ -184,17 +158,6 @@ export default function ManagerDashboard() {
               </h3>
               <p className="text-gray-600 text-sm">
                 Review and manage intern applications
-              </p>
-            </Link>
-            <Link
-              href="/manager-dashboard/profile"
-              className="block p-4 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition"
-            >
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Account Settings
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Update your profile and preferences
               </p>
             </Link>
           </div>
