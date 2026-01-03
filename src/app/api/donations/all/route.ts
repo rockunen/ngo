@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 100);
     const offset = parseInt(searchParams.get("offset") || "0");
 
-    // Fetch all donations with pagination
+    // Fetch all donations with pagination and relational data
     const { data, count, error } = await supabase
       .from("donations")
       .select(
@@ -28,7 +28,10 @@ export async function GET(request: NextRequest) {
         message,
         status,
         created_at,
-        donor_id
+        donor_id,
+        intern_id,
+        donors:donor_id(id, full_name, email),
+        interns:intern_id(id, name)
       `,
         { count: "exact" }
       )
@@ -40,26 +43,22 @@ export async function GET(request: NextRequest) {
       throw error;
     }
 
-    // Fetch related donor data
-    const donorIds = [...new Set(data?.map((d) => d.donor_id) || [])];
-
-    let donorsMap: Record<string, any> = {};
-
-    if (donorIds.length > 0) {
-      const { data: donors, error: donorsError } = await supabase
-        .from("donors")
-        .select("id, full_name, email")
-        .in("id", donorIds);
-
-      if (!donorsError && donors) {
-        donorsMap = Object.fromEntries(donors.map((d) => [d.id, d]));
-      }
-    }
-
-    // Format the response with related data
-    const formattedData = (data || []).map((donation) => ({
-      ...donation,
-      donors: donorsMap[donation.donor_id] || null,
+    // Format the response - handle the relational data from Supabase
+    const formattedData = (data || []).map((donation: any) => ({
+      id: donation.id,
+      amount: donation.amount,
+      currency: donation.currency,
+      message: donation.message,
+      status: donation.status,
+      created_at: donation.created_at,
+      donor_id: donation.donor_id,
+      intern_id: donation.intern_id,
+      donors: Array.isArray(donation.donors)
+        ? donation.donors[0]
+        : donation.donors,
+      interns: Array.isArray(donation.interns)
+        ? donation.interns[0]
+        : donation.interns,
     }));
 
     return NextResponse.json({

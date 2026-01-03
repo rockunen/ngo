@@ -50,6 +50,20 @@ export async function POST(request: NextRequest) {
 
     const supabase = supabaseServer();
 
+    // If referral code is provided, look up the intern ID
+    let resolvedInternId = internId;
+    if (referralCode && !internId) {
+      const { data: internData, error: internError } = await supabase
+        .from("interns")
+        .select("id")
+        .eq("referral_code", referralCode)
+        .single();
+
+      if (!internError && internData) {
+        resolvedInternId = internData.id;
+      }
+    }
+
     // Create or get donor
     const donor = await supabase
       .from("donors")
@@ -113,8 +127,8 @@ export async function POST(request: NextRequest) {
     };
 
     // Add intern_id if this is an intern donation
-    if (internId) {
-      donationPayload.intern_id = internId;
+    if (resolvedInternId) {
+      donationPayload.intern_id = resolvedInternId;
     }
 
     // Add idempotency key if needed
@@ -153,7 +167,7 @@ export async function POST(request: NextRequest) {
         donor_id: donorId,
         donation_id: donation.id,
         donor_name: data.fullName,
-        intern_id: internId || "",
+        intern_id: resolvedInternId || "",
         referral_code: referralCode || "",
       },
     });
@@ -171,7 +185,7 @@ export async function POST(request: NextRequest) {
       key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       donor_name: data.fullName,
       donation_id: donation.id,
-      intern_id: internId,
+      intern_id: resolvedInternId,
       referral_code: referralCode,
     });
   } catch {

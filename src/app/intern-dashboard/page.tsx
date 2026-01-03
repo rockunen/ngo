@@ -18,6 +18,13 @@ interface InternDonation {
   amount: number;
   status: "pending" | "completed" | "failed";
   created_at: string;
+  donors: {
+    full_name: string;
+    email: string;
+    phone: string;
+    city?: string;
+    state?: string;
+  };
 }
 
 export default function InternDashboard() {
@@ -243,6 +250,15 @@ export default function InternDashboard() {
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                         Date
                       </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                        Donor Name
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                        Donor Email
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                        Donor Phone
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -270,6 +286,15 @@ export default function InternDashboard() {
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
                           {new Date(donation.created_at).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {donation.donors.full_name}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {donation.donors.email}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {donation.donors.phone}
                         </td>
                       </tr>
                     ))}

@@ -198,9 +198,7 @@ export default function InternshipPage() {
         <div className="absolute inset-0 "></div>
         <div className="relative max-w-6xl mx-auto px-4 text-center">
           <div className="bg-black/50 p-8 md:p-12 rounded-lg backdrop-blur-sm w-fit mx-auto">
-            <h1 className="text-5xl font-bold mb-4">
-              Social Internship Program
-            </h1>
+            <h1 className="text-5xl font-bold mb-4">Internship Program</h1>
             <p className="text-xl mb-8">
               Join Get Wish Foundation and make a real difference in society
             </p>
@@ -221,8 +219,8 @@ export default function InternshipPage() {
                 About Our Internship Program
               </h2>
               <p className="text-gray-700 mb-4 text-lg leading-relaxed">
-                Get Wish Foundation offers a comprehensive social internship
-                program designed to empower young professionals and students to
+                Get Wish Foundation offers a comprehensive Internship program
+                designed to empower young professionals and students to
                 contribute meaningfully to society while developing their skills
                 and gaining valuable work experience.
               </p>

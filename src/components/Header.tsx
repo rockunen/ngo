@@ -83,7 +83,7 @@ export default function Header() {
           href="/internship"
           className="nav-link hover:text-pink-600 transition"
         >
-          Social Internship
+          Internship
         </Link>
         <Link
           href="/gallery"
@@ -213,7 +213,7 @@ export default function Header() {
               className="block text-gray-900 hover:text-pink-600 font-semibold py-2 transition"
               onClick={closeMobileMenu}
             >
-              Social Internship
+              Internship
             </Link>
             <Link
               href="/gallery"

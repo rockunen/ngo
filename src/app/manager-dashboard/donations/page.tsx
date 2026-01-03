@@ -11,11 +11,16 @@ interface Donation {
   status: string;
   created_at: string;
   donor_id: string;
+  intern_id: string | null;
   donors: {
     id: string;
     full_name: string;
     email: string;
   };
+  interns: {
+    id: string;
+    name: string;
+  } | null;
 }
 
 interface DonationsResponse {
@@ -290,6 +295,9 @@ export default function DonationsManagementPage() {
                         Amount
                       </th>
                       <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                        Referred By
+                      </th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                         Date
                       </th>
                       <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
@@ -311,6 +319,9 @@ export default function DonationsManagementPage() {
                         </td>
                         <td className="px-6 py-4 text-sm font-semibold text-green-600">
                           {donation.currency} {donation.amount.toFixed(2)}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {donation.interns?.name || "Direct"}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
                           {new Date(donation.created_at).toLocaleDateString()}

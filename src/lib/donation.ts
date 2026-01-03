@@ -126,8 +126,11 @@ export const donationService = {
           message,
           status,
           created_at,
+          donor_id,
+          intern_id,
           projects(id, title),
-          donors(id, full_name, email)
+          donors(id, full_name, email),
+          interns(id, name)
         `
         )
         .eq("status", "completed")
@@ -135,7 +138,13 @@ export const donationService = {
         .limit(limit);
 
       if (error) throw error;
-      return data || [];
+      
+      // Format the response - handle the relational data from Supabase
+      return (data || []).map((donation: any) => ({
+        ...donation,
+        donors: Array.isArray(donation.donors) ? donation.donors[0] : donation.donors,
+        interns: Array.isArray(donation.interns) ? donation.interns[0] : donation.interns,
+      }));
     } catch (error) {
       throw error;
     }
