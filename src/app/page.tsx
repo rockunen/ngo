@@ -39,7 +39,7 @@ export default function HomePage() {
       image: "/assests/5.jpg",
     },
     {
-      title: "Love, Rescue, Protect",
+      title: "For Love , Rescue, Protect",
       image: "/assests/4.jpg",
     },
   ];
