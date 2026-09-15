@@ -20,6 +20,8 @@ export interface RazorpayOrderParams {
   currency?: string;
   receipt: string;
   notes?: Record<string, string>;
+  /** Passed as X-Razorpay-Idempotency-Key — Razorpay returns the same order if this key is reused within 24h */
+  idempotencyKey?: string;
 }
 
 // Validate donation amount (min ₹1, max ₹100,000)
@@ -43,12 +45,18 @@ export async function createRazorpayOrder(params: RazorpayOrderParams) {
       );
     }
 
-    const order = await razorpay.orders.create({
-      amount: params.amount,
-      currency: params.currency || "INR",
-      receipt: params.receipt,
-      notes: params.notes,
-    });
+    const order = await razorpay.orders.create(
+      {
+        amount: params.amount,
+        currency: params.currency || "INR",
+        receipt: params.receipt,
+        notes: params.notes,
+      },
+      // Pass idempotency key so Razorpay deduplicates on their side too
+      params.idempotencyKey
+        ? { idempotencyKey: params.idempotencyKey }
+        : undefined
+    );
     return order;
   } catch (error) {
     console.error("Razorpay order creation error:", error);

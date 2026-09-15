@@ -223,11 +223,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6 mb-6">
             <div>
-              <strong>Niti Ayog: UP/20XX/XXXXXXX</strong>
+              <strong>Niti Ayog: UP/2026/1099311</strong>
             </div>
             <div className="md:col-span-2">
               Tax exempted under Section 80G/12A of Income tax Vide Registration
-              No: XXXXXXXXXXXXXXX
+              No: U85500UP2025NPL237176
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-4">

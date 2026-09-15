@@ -2,6 +2,7 @@
 
 import DonationForm from "@/components/DonationForm";
 import Link from "next/link";
+import Script from "next/script";
 import { useState, useEffect } from "react";
 
 export default function DonatePage() {
@@ -22,6 +23,10 @@ export default function DonatePage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="lazyOnload"
+      />
       {/* Hero Section with Background Image */}
       <section
         className="relative py-16 md:py-24 px-4 md:px-6 text-white"

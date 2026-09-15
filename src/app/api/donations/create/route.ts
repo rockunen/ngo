@@ -111,10 +111,34 @@ export async function POST(request: NextRequest) {
       donorId = donor.data.id;
     }
 
-    // Create idempotency key
-    const idempotencyKey = `${donorId}-${
-      data.email
-    }-${amountInPaise}-${Math.floor(Date.now() / 60000)}`;
+    // Generate a stable idempotency key: same donor + amount + 1-minute window
+    // This prevents duplicate orders when a user double-clicks or retries within 60 seconds.
+    const idempotencyKey = `rzp-donation-${donorId}-${amountInPaise}-${Math.floor(
+      Date.now() / 60000
+    )}`;
+
+    // --- Idempotency check: return existing pending order if key already used ---
+    const { data: existingDonation } = await supabase
+      .from("donations")
+      .select("id, razorpay_order_id")
+      .eq("idempotency_key", idempotencyKey)
+      .eq("status", "pending")
+      .maybeSingle();
+
+    if (existingDonation?.razorpay_order_id) {
+      // Reuse the existing Razorpay order — no double charge risk
+      return NextResponse.json({
+        success: true,
+        order_id: existingDonation.razorpay_order_id,
+        amount: data.amount,
+        key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        donor_name: data.fullName,
+        donation_id: existingDonation.id,
+        intern_id: resolvedInternId,
+        referral_code: referralCode,
+      });
+    }
+    // -------------------------------------------------------------------------
 
     const donationPayload: any = {
       donor_id: donorId,
@@ -124,16 +148,12 @@ export async function POST(request: NextRequest) {
       referral_code: referralCode,
       status: "pending",
       receipt_sent: false,
+      idempotency_key: idempotencyKey, // always stored, used for dedup
     };
 
-    // Add intern_id if this is an intern donation
+    // Add intern_id if this donation was referred by an intern
     if (resolvedInternId) {
       donationPayload.intern_id = resolvedInternId;
-    }
-
-    // Add idempotency key if needed
-    if (process.env.NODE_ENV === "production") {
-      donationPayload.idempotency_key = idempotencyKey;
     }
 
     // Create donation record
@@ -156,13 +176,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create Razorpay order
+    // Create Razorpay order — pass idempotency key so Razorpay deduplicates on their side
     const receipt = `DONATION-${donorId}-${Date.now()}`;
 
     const razorpayOrder = await createRazorpayOrder({
       amount: amountInPaise,
       currency: "INR",
       receipt,
+      idempotencyKey,
       notes: {
         donor_id: donorId,
         donation_id: donation.id,

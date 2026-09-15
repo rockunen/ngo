@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
 import { verifyRazorpayWebhookSignature } from "@/lib/razorpay";
+import { sendEmail, generateDonationReceiptHTML } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Idempotent update: only update if not already completed
-      const { error: updateErr } = await supabase
+      const { data: updatedDonation, error: updateErr } = await supabase
         .from("donations")
         .update({
           status: "completed",
@@ -55,10 +56,49 @@ export async function POST(request: NextRequest) {
           updated_at: new Date().toISOString(),
         })
         .eq("id", donation.id)
-        .neq("status", "completed");
+        .neq("status", "completed")
+        .select("id, donor_id, amount, created_at, receipt_sent")
+        .maybeSingle();
 
       if (updateErr) {
         console.error("Failed to update donation on webhook:", updateErr);
+      }
+
+      // Send receipt email only if:
+      // 1. The update actually changed a row (i.e., it was pending before)
+      // 2. The receipt hasn't already been sent via /verify
+      if (updatedDonation && !updatedDonation.receipt_sent) {
+        try {
+          const { data: donor } = await supabase
+            .from("donors")
+            .select("full_name, email")
+            .eq("id", updatedDonation.donor_id)
+            .single();
+
+          if (donor) {
+            const receiptHTML = generateDonationReceiptHTML(
+              donor.full_name,
+              updatedDonation.amount,
+              updatedDonation.created_at,
+              payment_id
+            );
+
+            await sendEmail({
+              to: donor.email,
+              subject: "Donation Receipt - Get Wish Foundation",
+              html: receiptHTML,
+            });
+
+            // Mark receipt as sent so /verify doesn’t send a duplicate
+            await supabase
+              .from("donations")
+              .update({ receipt_sent: true })
+              .eq("id", updatedDonation.id);
+          }
+        } catch (emailErr) {
+          // Non-blocking — log and continue; receipt can be re-sent manually
+          console.error("Webhook: receipt email failed", emailErr);
+        }
       }
 
       return NextResponse.json({ success: true });
