@@ -3,17 +3,13 @@ import { supabaseServer } from "@/lib/supabase";
 import { verifyRazorpaySignature } from "@/lib/razorpay";
 import { sendEmail, generateDonationReceiptHTML } from "@/lib/email";
 
-// CORS headers for production
-const ALLOWED_ORIGINS = [
-  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-];
+import { isRequestAllowed } from "@/lib/cors";
 
 export async function POST(request: NextRequest) {
   try {
     // CORS Check
-    const origin = request.headers.get("origin");
-    if (origin && !ALLOWED_ORIGINS.includes(origin)) {
-      console.warn(`Unauthorized origin attempted: ${origin}`);
+    if (!isRequestAllowed(request)) {
+      console.warn(`Unauthorized origin attempted: ${request.headers.get("origin")}`);
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 

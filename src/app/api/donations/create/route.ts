@@ -3,27 +3,13 @@ import { supabaseServer } from "@/lib/supabase";
 import { createRazorpayOrder, validateDonationAmount } from "@/lib/razorpay";
 import { donationFormSchema } from "@/lib/types";
 
-// CORS headers for production
-const ALLOWED_ORIGINS = [
-  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-];
-
-function isOriginAllowed(origin: string | null): boolean {
-  if (!origin) return true; // Allow requests without origin (server-to-server)
-  return ALLOWED_ORIGINS.some(
-    (allowed) =>
-      origin === allowed ||
-      origin.includes("vercel.app") ||
-      origin === process.env.NEXT_PUBLIC_APP_URL
-  );
-}
+import { isRequestAllowed } from "@/lib/cors";
 
 export async function POST(request: NextRequest) {
   try {
     // CORS Check
-    const origin = request.headers.get("origin");
-    if (!isOriginAllowed(origin)) {
-      console.warn(`Unauthorized origin attempted: ${origin}`);
+    if (!isRequestAllowed(request)) {
+      console.warn(`Unauthorized origin attempted: ${request.headers.get("origin")}`);
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
