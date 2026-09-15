@@ -45,18 +45,15 @@ export async function createRazorpayOrder(params: RazorpayOrderParams) {
       );
     }
 
-    const order = await razorpay.orders.create(
-      {
-        amount: params.amount,
-        currency: params.currency || "INR",
-        receipt: params.receipt,
-        notes: params.notes,
+    const order = await razorpay.orders.create({
+      amount: params.amount,
+      currency: params.currency || "INR",
+      receipt: params.receipt,
+      notes: {
+        ...params.notes,
+        ...(params.idempotencyKey ? { idempotency_key: params.idempotencyKey } : {}),
       },
-      // Pass idempotency key so Razorpay deduplicates on their side too
-      params.idempotencyKey
-        ? { idempotencyKey: params.idempotencyKey }
-        : undefined
-    );
+    });
     return order;
   } catch (error) {
     console.error("Razorpay order creation error:", error);
