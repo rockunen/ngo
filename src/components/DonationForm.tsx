@@ -34,7 +34,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
 
   const customAmount = watch("amount");
 
-  const presetAmounts = [1000, 2000, 5000, 10000, 25000];
+  const presetAmounts = [500, 1000, 2000, 5000, 10000];
 
   // Prefill referral code from URL query parameter
   useEffect(() => {
@@ -167,9 +167,9 @@ export default function DonationForm({ projectId }: DonationFormProps) {
         </div>
         <input
           type="number"
-          placeholder="Or enter custom amount"
+          placeholder="Or enter custom amount (min ₹500)"
           {...register("amount", { valueAsNumber: true })}
-          min="1"
+          min="500"
           step="1"
           className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-base font-semibold transition"
         />

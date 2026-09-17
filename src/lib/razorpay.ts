@@ -24,8 +24,8 @@ export interface RazorpayOrderParams {
   idempotencyKey?: string;
 }
 
-// Validate donation amount (min ₹1, max ₹100,000)
-const MIN_DONATION_AMOUNT = 1;
+// Validate donation amount (min ₹500, max ₹100,000)
+const MIN_DONATION_AMOUNT = 50000; // ₹500 in paise
 const MAX_DONATION_AMOUNT = 10000000; // ₹100,000 in paise
 
 export function validateDonationAmount(amountInPaise: number): boolean {

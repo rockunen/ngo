@@ -5,7 +5,7 @@ export const donationFormSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address").optional(),
   phone: z.string().optional(),
-  amount: z.number().min(1, "Amount must be greater than 0"),
+  amount: z.number().min(500, "Minimum donation amount is ₹500"),
   message: z
     .string()
     .max(500, "Message must be less than 500 characters")
