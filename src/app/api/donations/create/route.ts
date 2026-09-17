@@ -60,12 +60,7 @@ export async function POST(request: NextRequest) {
     let donorId: string;
 
     if (getDonorError) {
-      console.error("Get donor error:", {
-        code: getDonorError.code,
-        message: getDonorError.message,
-        details: getDonorError.details,
-        hint: getDonorError.hint,
-      });
+      console.error("Get donor error:", getDonorError);
       return NextResponse.json(
         { error: "Failed to process donation" },
         { status: 500 }
@@ -92,12 +87,7 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (createError) {
-        console.error("Create donor error:", {
-          code: createError.code,
-          message: createError.message,
-          details: createError.details,
-          hint: createError.hint,
-        });
+        console.error("Create donor error:", createError);
         return NextResponse.json(
           { error: "Failed to process donation" },
           { status: 500 }
@@ -207,8 +197,8 @@ export async function POST(request: NextRequest) {
       intern_id: resolvedInternId,
       referral_code: referralCode,
     });
-  } catch {
-    console.error("Donation creation error - System error occurred");
+  } catch (error) {
+    console.error("Donation creation error:", error);
     return NextResponse.json(
       { error: "Failed to process donation request" },
       { status: 500 }
