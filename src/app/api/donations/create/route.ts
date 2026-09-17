@@ -51,15 +51,28 @@ export async function POST(request: NextRequest) {
     }
 
     // Create or get donor
-    const donor = await supabase
+    const { data: existingDonor, error: getDonorError } = await supabase
       .from("donors")
       .select("id")
       .eq("email", data.email)
-      .single();
+      .maybeSingle();
 
     let donorId: string;
 
-    if (donor.error?.code === "PGRST116") {
+    if (getDonorError) {
+      console.error("Get donor error:", {
+        code: getDonorError.code,
+        message: getDonorError.message,
+        details: getDonorError.details,
+        hint: getDonorError.hint,
+      });
+      return NextResponse.json(
+        { error: "Failed to process donation" },
+        { status: 500 }
+      );
+    }
+
+    if (!existingDonor) {
       // Donor doesn't exist, create new
       const { data: newDonor, error: createError } = await supabase
         .from("donors")
@@ -79,7 +92,12 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (createError) {
-        console.error("Create donor error - Database operation failed");
+        console.error("Create donor error:", {
+          code: createError.code,
+          message: createError.message,
+          details: createError.details,
+          hint: createError.hint,
+        });
         return NextResponse.json(
           { error: "Failed to process donation" },
           { status: 500 }
@@ -87,14 +105,8 @@ export async function POST(request: NextRequest) {
       }
 
       donorId = newDonor.id;
-    } else if (donor.error) {
-      console.error("Get donor error - Database operation failed");
-      return NextResponse.json(
-        { error: "Failed to process donation" },
-        { status: 500 }
-      );
     } else {
-      donorId = donor.data.id;
+      donorId = existingDonor.id;
     }
 
     // Generate a stable idempotency key: same donor + amount + 1-minute window
