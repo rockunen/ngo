@@ -100,31 +100,35 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate a stable idempotency key: same donor + amount + 1-minute window
-    // This prevents duplicate orders when a user double-clicks or retries within 60 seconds.
-    const idempotencyKey = `rzp-donation-${donorId}-${amountInPaise}-${Math.floor(
+    // This prevents duplicate orders when a user double-clicks within 60 seconds.
+    let idempotencyKey = `rzp-donation-${donorId}-${amountInPaise}-${Math.floor(
       Date.now() / 60000
     )}`;
 
-    // --- Idempotency check: return existing pending order if key already used ---
+    // --- Idempotency check ---
     const { data: existingDonation } = await supabase
       .from("donations")
-      .select("id, razorpay_order_id")
+      .select("id, razorpay_order_id, status")
       .eq("idempotency_key", idempotencyKey)
-      .eq("status", "pending")
       .maybeSingle();
 
-    if (existingDonation?.razorpay_order_id) {
-      // Reuse the existing Razorpay order — no double charge risk
-      return NextResponse.json({
-        success: true,
-        order_id: existingDonation.razorpay_order_id,
-        amount: data.amount,
-        key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        donor_name: data.fullName,
-        donation_id: existingDonation.id,
-        intern_id: resolvedInternId,
-        referral_code: referralCode,
-      });
+    if (existingDonation) {
+      if (existingDonation.status === "pending" && existingDonation.razorpay_order_id) {
+        // Reuse existing pending order — no double charge or duplicate order risk
+        return NextResponse.json({
+          success: true,
+          order_id: existingDonation.razorpay_order_id,
+          amount: data.amount,
+          key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          donor_name: data.fullName,
+          donation_id: existingDonation.id,
+          intern_id: resolvedInternId,
+          referral_code: referralCode,
+        });
+      }
+
+      // If previous donation with this key is completed/failed, make key unique so user can donate again
+      idempotencyKey = `${idempotencyKey}-${Date.now()}`;
     }
     // -------------------------------------------------------------------------
 
