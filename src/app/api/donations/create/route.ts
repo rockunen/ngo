@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create Razorpay order — pass idempotency key so Razorpay deduplicates on their side
-    const receipt = `DONATION-${donorId}-${Date.now()}`;
+    const receipt = `rcpt_${Date.now()}_${donation.id.slice(0, 8)}`;
 
     const razorpayOrder = await createRazorpayOrder({
       amount: amountInPaise,
