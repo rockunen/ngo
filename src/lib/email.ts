@@ -82,7 +82,7 @@ export function generateDonationReceiptHTML(
           <p>With gratitude,<br><strong>${organizationName}</strong></p>
         </div>
         <div class="footer">
-          <p>&copy; 2025 ${organizationName}. All rights reserved.</p>
+          <p>&copy; 2026 ${organizationName}. All rights reserved.</p>
         </div>
       </div>
     </body>

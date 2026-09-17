@@ -104,7 +104,7 @@ export default function HomePage() {
     },
     {
       icon: "🎁",
-      stat: "550+",
+      stat: "20+",
       label: "Products & Gifts",
       image: "/assests/04(2).png",
     },
@@ -226,8 +226,7 @@ export default function HomePage() {
               <strong>Niti Ayog: UP/2026/1099311</strong>
             </div>
             <div className="md:col-span-2">
-              Tax exempted under Section 80G/12A of Income tax Vide Registration
-              No: U85500UP2025NPL237176
+              Registration No: U85500UP2025NPL237176
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-4">

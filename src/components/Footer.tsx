@@ -120,7 +120,7 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="border-t border-gray-700 pt-6 text-center text-sm">
           <p>
-            &copy; 2025{" "}
+            &copy; 2026{" "}
             <Link href="/" className="hover:text-pink-500 transition">
               Get Wish Foundation
             </Link>{" "}
