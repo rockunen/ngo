@@ -42,6 +42,64 @@ export default function ManagerDashboard() {
     verifySession();
   }, [router]);
 
+  const [stats, setStats] = useState<{
+    totalDonationsAmount: number;
+    totalDonationsCount: number;
+    totalInternsCount: number;
+  }>({
+    totalDonationsAmount: 0,
+    totalDonationsCount: 0,
+    totalInternsCount: 0,
+  });
+  const [statsLoading, setStatsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      try {
+        setStatsLoading(true);
+        const [donationsRes, internsRes] = await Promise.all([
+          fetch("/api/donations/stats"),
+          fetch("/api/intern/all"),
+        ]);
+
+        let donationsAmount = 0;
+        let donationsCount = 0;
+        let internsCount = 0;
+
+        if (donationsRes.ok) {
+          const donData = await donationsRes.json();
+          if (donData.success && donData.data) {
+            donationsAmount = donData.data.completed?.totalAmount || 0;
+            donationsCount = donData.data.completed?.count || 0;
+          }
+        }
+
+        if (internsRes.ok) {
+          const intData = await internsRes.json();
+          if (intData.success && typeof intData.total === "number") {
+            internsCount = intData.total;
+          } else if (Array.isArray(intData.interns)) {
+            internsCount = intData.interns.length;
+          }
+        }
+
+        setStats({
+          totalDonationsAmount: donationsAmount,
+          totalDonationsCount: donationsCount,
+          totalInternsCount: internsCount,
+        });
+      } catch (err) {
+        console.error("Dashboard stats fetch error:", err);
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    if (manager) {
+      fetchDashboardStats();
+    }
+  }, [manager]);
+
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
@@ -107,7 +165,19 @@ export default function ManagerDashboard() {
               <h3 className="text-lg font-semibold text-gray-900">Donations</h3>
               <span className="text-2xl">💰</span>
             </div>
-            <p className="text-3xl font-bold text-green-600 mb-4">--</p>
+            {statsLoading ? (
+              <div className="h-9 w-24 bg-gray-200 animate-pulse rounded mb-4"></div>
+            ) : (
+              <div>
+                <p className="text-3xl font-bold text-green-600 mb-1">
+                  ₹{stats.totalDonationsAmount.toLocaleString("en-IN")}
+                </p>
+                <p className="text-sm text-gray-500 mb-4">
+                  {stats.totalDonationsCount} completed donation
+                  {stats.totalDonationsCount !== 1 ? "s" : ""}
+                </p>
+              </div>
+            )}
             <Link
               href="/manager-dashboard/donations"
               className="text-blue-600 font-semibold hover:underline"
@@ -122,7 +192,19 @@ export default function ManagerDashboard() {
               <h3 className="text-lg font-semibold text-gray-900">Interns</h3>
               <span className="text-2xl">👥</span>
             </div>
-            <p className="text-3xl font-bold text-purple-600 mb-4">--</p>
+            {statsLoading ? (
+              <div className="h-9 w-24 bg-gray-200 animate-pulse rounded mb-4"></div>
+            ) : (
+              <div>
+                <p className="text-3xl font-bold text-purple-600 mb-1">
+                  {stats.totalInternsCount}
+                </p>
+                <p className="text-sm text-gray-500 mb-4">
+                  Registered intern
+                  {stats.totalInternsCount !== 1 ? "s" : ""}
+                </p>
+              </div>
+            )}
             <Link
               href="/manager-dashboard/interns"
               className="text-blue-600 font-semibold hover:underline"
