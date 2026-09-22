@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS public.donations (
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed')),
   receipt_sent BOOLEAN DEFAULT FALSE,
   receipt_number TEXT UNIQUE,
-  razorpay_order_id TEXT UNIQUE,
-  razorpay_payment_id TEXT UNIQUE,
-  razorpay_signature TEXT,
+  pg_order_id TEXT UNIQUE,
+  pg_payment_id TEXT UNIQUE,
+  pg_signature TEXT,
   idempotency_key TEXT UNIQUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -93,3 +93,14 @@ DROP POLICY IF EXISTS "Donations are viewable by anyone (for public stats)" ON p
 CREATE POLICY "Donations are viewable by anyone (for public stats)"
   ON public.donations FOR SELECT
   USING (true);
+
+-- ==============================================================================
+-- MIGRATION COMMANDS: Run these if you are upgrading from Razorpay to PhonePe!
+-- ==============================================================================
+-- If you created your table earlier, your database still has the old razorpay 
+-- columns instead of the new generic pg (Payment Gateway) columns. 
+-- Uncomment and run these lines ONE TIME in your Supabase SQL Editor:
+-- 
+-- ALTER TABLE public.donations RENAME COLUMN razorpay_order_id TO pg_order_id;
+-- ALTER TABLE public.donations RENAME COLUMN razorpay_payment_id TO pg_payment_id;
+-- ALTER TABLE public.donations RENAME COLUMN razorpay_signature TO pg_signature;

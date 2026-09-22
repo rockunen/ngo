@@ -100,7 +100,7 @@ export default function Food() {
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-4xl font-bold text-pink-600 mb-2">2M+</div>
+                <div className="text-4xl font-bold text-pink-600 mb-2">500+</div>
                 <p className="text-gray-700">Meals Served</p>
               </div>
               <div className="text-center">
@@ -111,7 +111,7 @@ export default function Food() {
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-pink-600 mb-2">
-                  10K+
+                  2K+
                 </div>
                 <p className="text-gray-700">Children Nourished</p>
               </div>

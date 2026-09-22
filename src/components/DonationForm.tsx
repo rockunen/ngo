@@ -6,11 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { donationFormSchema, DonationFormData } from "@/lib/types";
 import { useSearchParams } from "next/navigation";
 
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
+// Removed Razorpay types
 
 interface DonationFormProps {
   projectId?: string;
@@ -71,63 +67,14 @@ export default function DonationForm({ projectId }: DonationFormProps) {
         throw new Error(errorData.error || "Failed to create donation");
       }
 
-      const { order_id, key_id, donation_id, donor_name, donor_email } =
-        await createResponse.json();
+      const { redirectUrl } = await createResponse.json();
 
-      // Step 2: Initialize Razorpay
-      const options = {
-        key: key_id,
-        amount: (selectedAmount || data.amount) * 100,
-        currency: "INR",
-        name: "Save Rana National Trust",
-        description: "Donation for Conservation",
-        order_id,
-        prefill: {
-          name: donor_name,
-          email: donor_email,
-          contact: data.phone,
-        },
-        handler: async (response: any) => {
-          try {
-            // Step 3: Verify payment
-            const verifyResponse = await fetch("/api/donations/verify", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                order_id,
-                payment_id: response.razorpay_payment_id,
-                signature: response.razorpay_signature,
-                donation_id,
-              }),
-            });
-
-            if (!verifyResponse.ok) {
-              throw new Error("Payment verification failed");
-            }
-
-            const verifyData = await verifyResponse.json();
-
-            // Success - show thank you page
-            if (verifyData.success) {
-              window.location.href = `/donate/success?donation_id=${donation_id}`;
-            }
-          } catch (error) {
-            setError("Payment verification failed. Please contact support.");
-            console.error("Verification error:", error);
-          }
-        },
-        modal: {
-          ondismiss: () => {
-            setError(
-              "❌ Payment cancelled. Please try again or contact support if you need help."
-            );
-            setIsLoading(false);
-          },
-        },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
+      // Step 2: Redirect to PhonePe
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        throw new Error("Did not receive a redirect URL from the server");
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -221,7 +168,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              📱 Phone Number (Optional)
+              📱 Phone Number *
             </label>
             <input
               type="tel"

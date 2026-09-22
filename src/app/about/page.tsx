@@ -220,7 +220,7 @@ export default function About() {
             <div className="grid md:grid-cols-4 gap-6">
               {[
                 { icon: "👥", stat: "300+", label: "Active Volunteers" },
-                { icon: "👨‍👩‍👧‍👦", stat: "50K+", label: "Families Supported" },
+                { icon: "👨‍👩‍👧‍👦", stat: "1K+", label: "Families Supported" },
                 { icon: "🌍", stat: "25+", label: "States Covered" },
                 { icon: "💚", stat: "100K+", label: "Lives Impacted" },
               ].map((item, i) => (

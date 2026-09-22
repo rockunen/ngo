@@ -101,19 +101,19 @@ export default function Environment() {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="text-4xl font-bold text-green-600 mb-2">
-                  50K+
+                  5K+
                 </div>
                 <p className="text-gray-700">Trees Planted</p>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-green-600 mb-2">
-                  100T+
+                  4T+
                 </div>
                 <p className="text-gray-700">Waste Recycled</p>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-green-600 mb-2">
-                  20K+
+                  3K+
                 </div>
                 <p className="text-gray-700">People Engaged</p>
               </div>
