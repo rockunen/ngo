@@ -123,16 +123,7 @@ export default function Footer() {
             &copy; 2026{" "}
             <Link href="/" className="hover:text-pink-500 transition">
               Get Wish Foundation
-            </Link>{" "}
-            Creation By{" "}
-            <a
-              href="mailto:cy381144@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-pink-500 transition"
-            >
-              Chandan
-            </a>
+            </Link>
           </p>
         </div>
       </div>
