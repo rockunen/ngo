@@ -96,7 +96,7 @@ export default function Terms() {
               </h2>
               <p className="text-gray-700 leading-relaxed">
                 The materials appearing on Get Wish Foundation website could
-                include technical, typographical, or photographic errors. Savera
+                include technical, typographical, or photographic errors. Getwishfoundation
                 National Trust does not warrant that any of the materials on
                 this website are accurate, complete, or current.
                 getWishFoundationNational Trust may make changes to the

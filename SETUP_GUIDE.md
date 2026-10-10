@@ -146,7 +146,7 @@ RAZORPAY_KEY_SECRET=your_key_secret_here
 #    - Select "Mail" and "Windows Computer"
 #    - Copy the 16-character password
 
-EMAIL_FROM=noreply@saverana.org
+EMAIL_FROM=noreply@getwishfoundation.org
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your-email@gmail.com
@@ -180,7 +180,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 # NEXT_PUBLIC_APP_URL=https://yourdomain.com
 
 # Admin email for notifications
-ADMIN_EMAIL=admin@saverana.org
+ADMIN_EMAIL=admin@getwishfoundation.org
 ```
 
 ---

@@ -77,7 +77,7 @@ export function generateDonationReceiptHTML(
           
           <p>This donation is eligible for tax benefits under section 80G of the Indian Income Tax Act. A detailed receipt will be mailed to you separately.</p>
           
-          <p>For any queries, please contact us at admin@saverana.org</p>
+          <p>For any queries, please contact us at contact@getwishfoundation.org</p>
           
           <p>With gratitude,<br><strong>${organizationName}</strong></p>
         </div>

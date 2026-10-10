@@ -84,7 +84,7 @@ function SuccessContent() {
             Back to Home
           </Link>
           <a
-            href="mailto:admin@saverana.org"
+            href="mailto:admin@getwishfoundation.org"
             className="inline-block bg-gray-100 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
           >
             Contact Us
@@ -101,7 +101,7 @@ function SuccessContent() {
             don't see it, check your spam folder or contact us.
           </p>
           <p className="text-blue-800 text-sm">
-            <strong>Email:</strong> admin@saverana.org
+            <strong>Email:</strong> admin@getwishfoundation.org
           </p>
         </div>
       </div>
