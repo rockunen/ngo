@@ -4,17 +4,7 @@ import { z } from "zod";
 export const donationFormSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address").optional(),
-  phone: z
-    .string()
-    .min(10, "Phone number must be at least 10 digits")
-    .regex(
-      /^[0-9\s\-\+\(\)]*$/,
-      "Phone number can only contain digits, spaces, dashes, and parentheses"
-    )
-    .refine((phone) => {
-      const digitsOnly = phone.replace(/\D/g, "");
-      return digitsOnly.length >= 10;
-    }, "Phone number must contain at least 10 digits"),
+  phone: z.string().optional(),
   amount: z.number().min(500, "Minimum donation amount is ₹500"),
   message: z
     .string()
@@ -90,9 +80,9 @@ export interface Donation {
   amount: number;
   currency: string;
   message?: string;
-  pg_order_id: string;
-  pg_payment_id?: string;
-  pg_signature?: string;
+  razorpay_order_id: string;
+  razorpay_payment_id?: string;
+  razorpay_signature?: string;
   status: "pending" | "completed" | "failed";
   receipt_sent: boolean;
   created_at: string;

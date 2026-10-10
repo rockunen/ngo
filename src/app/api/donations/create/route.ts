@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
-import { createPhonePeOrder, validateDonationAmount } from "@/lib/phonepe";
+import { createRazorpayOrder, validateDonationAmount } from "@/lib/razorpay";
 import { donationFormSchema } from "@/lib/types";
 
 import { isRequestAllowed } from "@/lib/cors";
@@ -108,18 +108,29 @@ export async function POST(request: NextRequest) {
     // --- Idempotency check ---
     const { data: existingDonation } = await supabase
       .from("donations")
-      .select("id, pg_order_id, status")
+      .select("id, razorpay_order_id, status")
       .eq("idempotency_key", idempotencyKey)
       .maybeSingle();
 
     if (existingDonation) {
-      // If previous donation exists, make key unique so user can donate again and get a new PhonePe transaction ID
+      if (existingDonation.status === "pending" && existingDonation.razorpay_order_id) {
+        // Reuse existing pending order — no double charge or duplicate order risk
+        return NextResponse.json({
+          success: true,
+          order_id: existingDonation.razorpay_order_id,
+          amount: data.amount,
+          key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          donor_name: data.fullName,
+          donation_id: existingDonation.id,
+          intern_id: resolvedInternId,
+          referral_code: referralCode,
+        });
+      }
+
+      // If previous donation with this key is completed/failed, make key unique so user can donate again
       idempotencyKey = `${idempotencyKey}-${Date.now()}`;
     }
     // -------------------------------------------------------------------------
-
-    // Create PhonePe order transaction ID before insert
-    const transactionId = `txn_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
 
     const donationPayload: any = {
       donor_id: donorId,
@@ -130,7 +141,6 @@ export async function POST(request: NextRequest) {
       status: "pending",
       receipt_sent: false,
       idempotency_key: idempotencyKey, // always stored, used for dedup
-      pg_order_id: transactionId,
     };
 
     // Add intern_id if this donation was referred by an intern
@@ -139,33 +149,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Create donation record
-    let donation: any = null;
-    let donationError: any = null;
-
-    const { data: insertedData, error: insertError } = await supabase
+    const { data: donation, error: donationError } = await supabase
       .from("donations")
       .insert([donationPayload])
       .select()
       .single();
-    
-    if (insertError) {
-      if (insertError.code === '23505') {
-        // Unique constraint violation (race condition / double click)
-        return NextResponse.json(
-          { error: "A donation is already being processed. Please wait a moment." },
-          { status: 429 }
-        );
-      }
-      donationError = insertError;
-    } else {
-      donation = insertedData;
-    }
 
-    if (donationError || !donation) {
+    if (donationError) {
       console.error("Create donation error:", {
-        code: donationError?.code,
-        message: donationError?.message,
-        details: donationError?.details,
+        code: donationError.code,
+        message: donationError.message,
+        details: donationError.details,
+        hint: donationError.hint,
       });
       return NextResponse.json(
         { error: "Failed to process donation" },
@@ -173,27 +168,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const hostUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
-    
-    // Return URL for the user to be redirected to
-    const returnUrl = `${hostUrl}/api/donations/verify`;
-    // Callback URL for PhonePe server-to-server webhook
-    const callbackUrl = `${hostUrl}/api/webhooks/phonepe`;
+    // Create Razorpay order — pass idempotency key so Razorpay deduplicates on their side
+    const receipt = `rcpt_${Date.now()}_${donation.id.slice(0, 8)}`;
 
-    const phonepeOrder = await createPhonePeOrder({
+    const razorpayOrder = await createRazorpayOrder({
       amount: amountInPaise,
-      transactionId,
-      userId: donorId,
-      mobileNumber: data.phone,
-      returnUrl,
-      callbackUrl,
+      currency: "INR",
+      receipt,
+      idempotencyKey,
+      notes: {
+        donor_id: donorId,
+        donation_id: donation.id,
+        donor_name: data.fullName,
+        intern_id: resolvedInternId || "",
+        referral_code: referralCode || "",
+      },
     });
+
+    // Update donation with Razorpay order ID (will be fully updated after payment)
+    await supabase
+      .from("donations")
+      .update({ razorpay_order_id: razorpayOrder.id })
+      .eq("id", donation.id);
 
     return NextResponse.json({
       success: true,
-      redirectUrl: phonepeOrder.redirectUrl,
-      transactionId,
+      order_id: razorpayOrder.id,
+      amount: data.amount,
+      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      donor_name: data.fullName,
       donation_id: donation.id,
+      intern_id: resolvedInternId,
+      referral_code: referralCode,
     });
   } catch (error) {
     console.error("Donation creation error:", error);
