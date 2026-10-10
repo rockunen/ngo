@@ -79,7 +79,7 @@ export default function DonationForm({ projectId }: DonationFormProps) {
         key: key_id,
         amount: (selectedAmount || data.amount) * 100,
         currency: "INR",
-        name: "Save Rana National Trust",
+        name: "Get Wish Foundation",
         description: "Donation for Conservation",
         order_id,
         prefill: {

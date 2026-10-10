@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Donation Successful | Save Rana National Trust",
-  description: "Thank you for your donation to Save Rana National Trust!",
+  title: "Donation Successful | Get Wish Foundation",
+  description: "Thank you for your donation to Get Wish Foundation!",
 };
 
 function SuccessContent() {

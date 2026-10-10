@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Our Projects | Save Rana National Trust",
+  title: "Our Projects | Get Wish Foundation",
   description:
     "Explore our conservation projects focused on habitat restoration, breeding programs, and research.",
 };

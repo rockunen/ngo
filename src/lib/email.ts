@@ -39,7 +39,7 @@ export function generateDonationReceiptHTML(
   amount: number,
   date: string,
   transactionId: string,
-  organizationName: string = "Save Rana National Trust"
+  organizationName: string = "Get Wish Foundation"
 ): string {
   return `
     <!DOCTYPE html>
