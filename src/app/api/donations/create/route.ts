@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const amountInPaise = Math.round(data.amount * 100);
     if (!validateDonationAmount(amountInPaise)) {
       return NextResponse.json(
-        { error: "Invalid donation amount. Must be between ₹1 and ₹100,000" },
+        { error: "Invalid donation amount. Must be between ₹500 and ₹100,000" },
         { status: 400 }
       );
     }
