@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
+import {
+  hashInternPassword,
+  MAX_INTERN_PASSWORD_LENGTH,
+  MIN_INTERN_PASSWORD_LENGTH,
+} from "@/lib/intern-password";
 import { z } from "zod";
 import crypto from "crypto";
 
@@ -29,7 +34,16 @@ const internSignupAPISchema = z.object({
       const digitsOnly = phone.replace(/\D/g, "");
       return digitsOnly.length >= 10;
     }, "Phone number must contain at least 10 digits"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z
+    .string()
+    .min(
+      MIN_INTERN_PASSWORD_LENGTH,
+      `Password must be at least ${MIN_INTERN_PASSWORD_LENGTH} characters`
+    )
+    .max(
+      MAX_INTERN_PASSWORD_LENGTH,
+      `Password must be ${MAX_INTERN_PASSWORD_LENGTH} characters or fewer`
+    ),
 });
 
 export async function POST(request: NextRequest) {
@@ -64,10 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Hash password
-    const passwordHash = crypto
-      .createHash("sha256")
-      .update(password + (process.env.INTERN_PASSWORD_SALT || "default_salt"))
-      .digest("hex");
+    const passwordHash = hashInternPassword(password);
 
     // Generate unique referral code
     let referralCode = generateReferralCode();

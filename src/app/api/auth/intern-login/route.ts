@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
 import { internLoginSchema } from "@/lib/types";
+import { hashInternPassword } from "@/lib/intern-password";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
@@ -32,10 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password
-    const passwordHash = crypto
-      .createHash("sha256")
-      .update(password + (process.env.INTERN_PASSWORD_SALT || "default_salt"))
-      .digest("hex");
+    const passwordHash = hashInternPassword(password);
 
     if (passwordHash !== intern.password_hash) {
       return NextResponse.json(

@@ -110,6 +110,11 @@ export default function InternLogin() {
           </button>
         </form>
 
+        <p className="text-center text-gray-500 text-sm mt-5">
+          Forgot your password? Ask an administrator to reset it from the
+          manager panel.
+        </p>
+
         {/* Signup Link */}
         <p className="text-center text-gray-600 text-sm mt-6">
           Don't have an account?{" "}
