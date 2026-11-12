@@ -89,33 +89,40 @@ export default function DonatePage() {
                   </h3>
                 </div>
 
-                {/* Impact Tips List */}
-                <div className="space-y-3">
-                  <div className="bg-white/90 rounded-lg p-3">
-                    <p className="text-gray-900 font-semibold text-sm">
-                      ₹500 - Provides food for 10 animals for one week
-                    </p>
+                {/* Impact Tips Table */}
+                <div className="overflow-hidden rounded-lg bg-white/90 text-gray-900">
+                  <div className="grid grid-cols-[minmax(5rem,0.7fr)_minmax(0,2fr)] border-b border-gray-200 px-4 py-3 font-bold text-sm">
+                    <span>Your Donation</span>
+                    <span>The Difference You Can Make</span>
                   </div>
-                  <div className="bg-white/90 rounded-lg p-3">
-                    <p className="text-gray-900 font-semibold text-sm">
-                      ₹1000 - Funds medical treatment for an injured animal
-                    </p>
-                  </div>
-                  <div className="bg-white/90 rounded-lg p-3">
-                    <p className="text-gray-900 font-semibold text-sm">
-                      ₹2500 - Supports habitat restoration for 1 month
-                    </p>
-                  </div>
-                  <div className="bg-white/90 rounded-lg p-3">
-                    <p className="text-gray-900 font-semibold text-sm">
-                      ₹5000 - Provides shelter and care for 5 rescued animals
-                    </p>
-                  </div>
-                  <div className="bg-white/90 rounded-lg p-3">
-                    <p className="text-gray-900 font-semibold text-sm">
-                      ₹10000 - Funds a complete conservation project
-                    </p>
-                  </div>
+                  {[
+                    ["₹500", "Support basic educational or community needs"],
+                    [
+                      "₹1000",
+                      "Contribute towards learning materials and essential supplies",
+                    ],
+                    [
+                      "₹1,500",
+                      "Support plantation and environmental initiatives",
+                    ],
+                    [
+                      "₹2,000",
+                      "Support food, education or community welfare initiatives",
+                    ],
+                    ["₹5000", "Strengthen ongoing social welfare activities"],
+                    [
+                      "₹10,000+",
+                      "Help expand the reach of meaningful initiatives",
+                    ],
+                  ].map(([amount, impact]) => (
+                    <div
+                      key={amount}
+                      className="grid grid-cols-[minmax(5rem,0.7fr)_minmax(0,2fr)] gap-3 border-b border-gray-200 px-4 py-3 text-sm last:border-b-0"
+                    >
+                      <span className="font-semibold">{amount}</span>
+                      <span>{impact}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
