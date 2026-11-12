@@ -48,22 +48,22 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const searchPattern = search ? escapePostgrestPattern(search) : "";
     let matchingDonorIds: string[] = [];
     let matchingInternIds: string[] = [];
 
     if (search) {
-      const pattern = escapePostgrestPattern(search);
       const [donorResult, internResult] = await Promise.all([
         supabase
           .from("donors")
           .select("id")
           .or(
-            `full_name.ilike."%${pattern}%",email.ilike."%${pattern}%"`
+            `full_name.ilike."%${searchPattern}%",email.ilike."%${searchPattern}%"`
           ),
         supabase
           .from("interns")
           .select("id")
-          .ilike("name", `%${pattern}%`),
+          .ilike("name", `%${searchPattern}%`),
       ]);
 
       if (donorResult.error || internResult.error) {
@@ -76,16 +76,6 @@ export async function GET(request: NextRequest) {
 
       matchingDonorIds = (donorResult.data || []).map((donor) => donor.id);
       matchingInternIds = (internResult.data || []).map((intern) => intern.id);
-
-      if (matchingDonorIds.length === 0 && matchingInternIds.length === 0) {
-        return NextResponse.json({
-          success: true,
-          data: [],
-          total: 0,
-          limit,
-          offset,
-        });
-      }
     }
 
     // Filter before pagination so search covers the complete donation history.
@@ -114,7 +104,9 @@ export async function GET(request: NextRequest) {
     }
 
     if (search) {
-      const searchFilters = [];
+      const searchFilters = [
+        `referral_code.ilike."%${searchPattern}%"`,
+      ];
 
       if (matchingDonorIds.length > 0) {
         searchFilters.push(`donor_id.in.(${matchingDonorIds.join(",")})`);

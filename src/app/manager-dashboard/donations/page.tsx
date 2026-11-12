@@ -377,7 +377,7 @@ export default function DonationsManagementPage() {
               </label>
               <input
                 type="text"
-                placeholder="Search by donor name, email, or referred person..."
+                placeholder="Search by donor name, email, referred person, or referral code..."
                 value={searchTerm}
                 maxLength={200}
                 onChange={(e) => {
